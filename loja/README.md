@@ -1,16 +1,17 @@
 # Lumo — loja virtual (demo em React)
 
-Protótipo de uma loja virtual moderna e responsiva, construída em **React**, mostrando o
-tipo de design e organização que entrego — uma alternativa de "site próprio" ao Wix.
+Protótipo de uma loja virtual **minimalista e responsiva**, construída em **React**, com
+fotos reais de produto — mostra o design e a organização que entrego como alternativa de
+"site próprio" ao Wix.
 
 🔗 **Demo ao vivo:** https://eduardoeug.github.io/workana/loja/
 
 ## O que a demo mostra
 
-- **Vitrine responsiva** com produtos organizados por categoria.
-- **Filtro por categoria** (Decoração, Cozinha, Plantas, Bem-estar).
+- **Estética clean** — muito espaço em branco, tipografia leve, paleta quase monocromática.
+- **Vitrine responsiva** com fotos reais, organizada por categoria (Decoração, Mesa, Plantas, Conforto).
+- **Filtro por categoria** e navegação intuitiva.
 - **Carrinho funcional** (sacola lateral): adicionar, ajustar quantidade, remover, subtotal e frete grátis progressivo.
-- **Navegação intuitiva** e design moderno, com identidade própria — sem cara de template.
 - Carrinho salvo no navegador (`localStorage`).
 
 ## Tecnologia
@@ -19,4 +20,4 @@ tipo de design e organização que entrego — uma alternativa de "site próprio
 em React conversaria com um **backend em Node** (API + banco de dados) e um **painel de
 administração** para o dono gerenciar produtos, pedidos e estoque.
 
-> Protótipo demonstrativo, com produtos fictícios. Não é o produto final.
+> Protótipo demonstrativo. Imagens ilustrativas e produtos fictícios — não é o produto final.
