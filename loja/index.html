@@ -125,22 +125,20 @@
 const {useState, useEffect} = React;
 const html = htm.bind(React.createElement);
 
-const img = (kw,lock) => 'https://loremflickr.com/600/600/'+kw+'?lock='+lock;
+const ph = (id,w,h) => 'https://images.unsplash.com/photo-'+id+'?auto=format&fit=crop&w='+w+'&h='+h+'&q=80';
+const sq = id => ph(id,700,700);
 const PRODUCTS = [
-  {id:1,  nome:'Vaso de Cerâmica',    cat:'Decoração', preco:119, img:img('vase',10),     tag:'Novo'},
-  {id:2,  nome:'Quadro Decorativo',   cat:'Decoração', preco:159, img:img('painting',11)},
-  {id:3,  nome:'Relógio de Parede',   cat:'Decoração', preco:99,  img:img('clock',12)},
-  {id:4,  nome:'Cesto Organizador',   cat:'Decoração', preco:79,  img:img('basket',13)},
-  {id:5,  nome:'Caneca de Porcelana', cat:'Mesa',      preco:49,  img:img('mug',14),       tag:'Novo'},
-  {id:6,  nome:'Bowl de Cerâmica',    cat:'Mesa',      preco:59,  img:img('bowl',15)},
-  {id:7,  nome:'Jogo de Pratos',      cat:'Mesa',      preco:199, img:img('plate',16)},
-  {id:8,  nome:'Suculenta no Vaso',   cat:'Plantas',   preco:45,  img:img('succulent',17), tag:'Mais vendido'},
-  {id:9,  nome:'Costela-de-adão',     cat:'Plantas',   preco:139, img:img('monstera',18)},
-  {id:10, nome:'Vela Aromática',      cat:'Conforto',  preco:69,  img:img('candle',19)},
-  {id:11, nome:'Almofada de Linho',   cat:'Conforto',  preco:89,  img:img('pillow',20)},
-  {id:12, nome:'Manta de Tricô',      cat:'Conforto',  preco:179, img:img('blanket',21),   tag:'Mais vendido'}
+  {id:1, nome:'Vaso de Cerâmica',   cat:'Decoração', preco:119, img:sq('1631125915902-d8abe9225ff2'), tag:'Novo'},
+  {id:2, nome:'Luminária de Mesa',  cat:'Decoração', preco:189, img:sq('1517991104123-1d56a6e81ed9')},
+  {id:3, nome:'Relógio de Parede',  cat:'Decoração', preco:99,  img:sq('1563861826100-9cb868fdbe1c')},
+  {id:4, nome:'Caneca de Cerâmica', cat:'Mesa',      preco:49,  img:sq('1610632380989-680fe40816c6'), tag:'Novo'},
+  {id:5, nome:'Bowl de Cerâmica',   cat:'Mesa',      preco:59,  img:sq('1510035618584-c442b241abe7')},
+  {id:6, nome:'Suculenta no Vaso',  cat:'Plantas',   preco:45,  img:sq('1520302630591-fd1c66edc19d'), tag:'Mais vendido'},
+  {id:7, nome:'Costela-de-adão',    cat:'Plantas',   preco:139, img:sq('1525498128493-380d1990a112')},
+  {id:8, nome:'Vela Aromática',     cat:'Conforto',  preco:69,  img:sq('1561212856-44e9bae482aa')},
+  {id:9, nome:'Manta de Tricô',     cat:'Conforto',  preco:179, img:sq('1600369672770-985fd30004eb'), tag:'Mais vendido'}
 ];
-const HERO_IMG = 'https://loremflickr.com/900/1120/monstera?lock=18';
+const HERO_IMG = ph('1583847268964-b28dc8f51f92', 900, 1120);
 const CATS = ['Todos','Decoração','Mesa','Plantas','Conforto'];
 const FRETE_GRATIS = 199;
 
@@ -246,7 +244,7 @@ function App(){
           <div className="foot-col"><h4>Ajuda</h4><a>Entrega</a><a>Trocas</a><a>Contato</a></div>
           <div className="foot-col"><h4>Pagamento</h4><a>Pix</a><a>Cartão em 6x</a><a>Boleto</a></div>
         </div>
-        <div className="foot-note">Protótipo demonstrativo · loja fictícia em React · imagens ilustrativas · carrinho salvo neste navegador</div>
+        <div className="foot-note">Protótipo demonstrativo · loja fictícia em React · imagens ilustrativas (Unsplash) · carrinho salvo neste navegador</div>
       </footer>
 
       <div className=${'backdrop'+(open?' show':'')} onClick=${()=>setOpen(false)}></div>

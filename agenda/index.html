@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marca — agendamento online (demo React)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3F4FB;
+    --surface:#FFFFFF;
+    --surface-2:#F5F6FC;
+    --ink:#191A2E;
+    --muted:#6B7088;
+    --line:#E7E9F3;
+    --line2:#D7DAEA;
+    --primary:#4F46E5;        /* indigo */
+    --primary-d:#4338CA;
+    --primary-soft:#ECEBFD;
+    --teal:#0EA5A4;
+    --teal-soft:#E2F6F5;
+    --pink:#E0529C;
+    --success:#11A36B;
+    --success-soft:#E3F6EE;
+    --warn:#E2533B;
+    --warn-soft:#FBE7E2;
+    --amber:#D98A1F;
+    --radius:18px;
+    --radius-s:12px;
+    --shadow:0 1px 2px rgba(25,26,46,.04), 0 10px 30px rgba(25,26,46,.07);
+    --shadow-s:0 1px 2px rgba(25,26,46,.05), 0 4px 14px rgba(25,26,46,.05);
+    --display:'Sora', system-ui, sans-serif;
+    --body:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+  button{font-family:inherit}
+  .boot{min-height:70vh;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px}
+
+  /* ---------- Top bar ---------- */
+  .hdr{position:sticky;top:0;z-index:30;background:rgba(243,244,251,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .hdr-in{max-width:1080px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:11px}
+  .mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(150deg,var(--primary),#7C74F0);position:relative;flex:none;box-shadow:0 4px 12px rgba(79,70,229,.32)}
+  .mark::before{content:"";position:absolute;left:8px;right:8px;top:11px;height:2.5px;background:#fff;border-radius:2px;opacity:.95}
+  .mark::after{content:"";position:absolute;left:8px;top:16px;width:8px;height:8px;border:2.5px solid #fff;border-top:none;border-right:none;border-radius:0 0 0 2px}
+  .brand b{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.02em;display:block;line-height:1}
+  .brand small{font-size:11px;color:var(--muted);font-weight:500}
+  .tenant{margin-left:6px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:5px 13px 5px 7px;box-shadow:var(--shadow-s)}
+  .tenant .tav{width:26px;height:26px;border-radius:50%;background:linear-gradient(150deg,#1f2147,#3a3d72);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .tenant .tn{font-size:13px;font-weight:600}
+  .tenant .tc{font-size:11px;color:var(--muted)}
+  .tabs{margin-left:auto;display:flex;background:var(--surface-2);border:1px solid var(--line);border-radius:30px;padding:4px;gap:3px}
+  .tabs button{border:none;background:none;font-size:13.5px;font-weight:600;color:var(--muted);padding:8px 17px;border-radius:30px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:7px}
+  .tabs button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-s)}
+  .tabs button:not(.on):hover{color:var(--ink)}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:26px 20px 90px}
+
+  /* ---------- Generic ---------- */
+  .eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);font-weight:700}
+  .h-lead{font-family:var(--display);font-size:25px;font-weight:700;letter-spacing:-.02em;margin:5px 0 4px}
+  .h-sub{color:var(--muted);font-size:14px}
+  .card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+  .btn{border:none;background:var(--primary);color:#fff;font:inherit;font-weight:600;font-size:14.5px;padding:13px 22px;border-radius:13px;cursor:pointer;transition:filter .12s,transform .1s;box-shadow:0 6px 16px rgba(79,70,229,.28)}
+  .btn:hover{filter:brightness(1.07)}
+  .btn:active{transform:translateY(1px)}
+  .btn:disabled{background:var(--line2);box-shadow:none;cursor:not-allowed;color:#fff}
+  .btn.ghost{background:none;color:var(--muted);box-shadow:none;font-weight:600;padding:11px 14px}
+  .btn.ghost:hover{color:var(--ink);background:var(--surface-2)}
+
+  /* ---------- Stepper ---------- */
+  .flow{max-width:760px;margin:0 auto}
+  .steps{display:flex;align-items:center;gap:6px;margin:18px 0 22px;justify-content:center;flex-wrap:wrap}
+  .stp{display:flex;align-items:center;gap:8px}
+  .stp .n{width:26px;height:26px;border-radius:50%;background:var(--surface);border:1.5px solid var(--line2);color:var(--muted);font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:.2s;flex:none}
+  .stp.on .n{background:var(--primary);border-color:var(--primary);color:#fff}
+  .stp.done .n{background:var(--success);border-color:var(--success);color:#fff}
+  .stp .lb{font-size:12.5px;font-weight:600;color:var(--muted)}
+  .stp.on .lb,.stp.done .lb{color:var(--ink)}
+  .stp .ln{width:24px;height:2px;background:var(--line2);border-radius:2px}
+  @media(max-width:640px){.stp .lb{display:none}.stp .ln{width:14px}}
+
+  .summary{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;justify-content:center}
+  .sm-chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:6px 12px;font-size:12.5px;font-weight:600;box-shadow:var(--shadow-s);cursor:pointer;transition:.12s}
+  .sm-chip:hover{border-color:var(--primary);color:var(--primary)}
+  .sm-chip .k{color:var(--muted);font-weight:500}
+
+  .panel-head{text-align:center;margin-bottom:18px}
+  .panel-head h2{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:-.01em}
+  .panel-head p{color:var(--muted);font-size:13.5px;margin-top:2px}
+
+  /* service grid */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+  .svc{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius-s);padding:16px;cursor:pointer;text-align:left;transition:.14s;position:relative;box-shadow:var(--shadow-s)}
+  .svc:hover{border-color:var(--primary);transform:translateY(-2px)}
+  .svc.sel{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+  .svc .emo{font-size:23px;display:block;margin-bottom:9px}
+  .svc .nm{font-weight:600;font-size:14.5px;line-height:1.25}
+  .svc .mt{display:flex;align-items:center;gap:8px;margin-top:9px}
+  .svc .dur{font-size:12px;color:var(--muted)}
+  .svc .pr{font-family:var(--display);font-size:14px;font-weight:700;margin-left:auto;color:var(--primary)}
+
+  /* pro list */
+  .pro{display:flex;align-items:center;gap:14px;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius-s);padding:14px 16px;cursor:pointer;transition:.14s;width:100%;text-align:left;margin-bottom:11px;box-shadow:var(--shadow-s)}
+  .pro:hover{border-color:var(--primary);transform:translateY(-1px)}
+  .pro.sel{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+  .av{width:46px;height:46px;border-radius:50%;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex:none;font-family:var(--display)}
+  .pro .pb{flex:1;min-width:0}
+  .pro .pn{font-weight:600;font-size:15px}
+  .pro .prl{font-size:12.5px;color:var(--muted)}
+  .pro .nxt{text-align:right;font-size:12px}
+  .pro .nxt b{display:block;font-size:12.5px;color:var(--success);font-weight:700}
+  .pro .nxt span{color:var(--muted)}
+  .pro.any{border-style:dashed}
+  .pro.any .av{background:var(--surface-2);color:var(--muted);border:1.5px dashed var(--line2)}
+
+  /* date strip */
+  .dates{display:flex;gap:9px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:thin}
+  .dates::-webkit-scrollbar{height:6px}
+  .dates::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
+  .day{flex:none;width:62px;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:11px 0;text-align:center;cursor:pointer;transition:.14s;box-shadow:var(--shadow-s)}
+  .day:hover:not(.off){border-color:var(--primary)}
+  .day.sel{background:var(--primary);border-color:var(--primary);color:#fff}
+  .day.off{opacity:.4;cursor:not-allowed}
+  .day .dw{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+  .day.sel .dw{color:#fff;opacity:.85}
+  .day .dd{font-family:var(--display);font-size:18px;font-weight:700;line-height:1.2;margin-top:1px}
+  .day .dm{font-size:10px;color:var(--muted)}
+  .day.sel .dm{color:#fff;opacity:.85}
+
+  /* slots */
+  .slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:10px;margin-top:4px}
+  .slot{border:1.5px solid var(--line);background:var(--surface);border-radius:11px;padding:12px 0;font-size:14px;font-weight:600;cursor:pointer;transition:.12s;box-shadow:var(--shadow-s)}
+  .slot:hover:not(:disabled){border-color:var(--primary);color:var(--primary)}
+  .slot.sel{background:var(--primary);border-color:var(--primary);color:#fff}
+  .slot:disabled{opacity:.34;cursor:not-allowed;text-decoration:line-through}
+  .slot-empty{text-align:center;color:var(--muted);padding:30px 12px;font-size:13.5px}
+  .slot-empty .ic{font-size:26px;display:block;margin-bottom:7px;opacity:.6}
+
+  /* confirm */
+  .recap{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius-s);padding:16px 18px;margin-bottom:18px}
+  .recap .rr{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px dashed var(--line2)}
+  .recap .rr:last-child{border:none}
+  .recap .ri{font-size:16px;width:22px;text-align:center;flex:none}
+  .recap .rk{font-size:12.5px;color:var(--muted);min-width:96px}
+  .recap .rv{font-size:14px;font-weight:600;margin-left:auto;text-align:right}
+  .recap .rv.tot{color:var(--primary);font-family:var(--display)}
+  .field{margin-bottom:13px}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  .field input{width:100%;border:1.5px solid var(--line);background:var(--surface-2);border-radius:11px;padding:12px 14px;font:inherit;font-size:14.5px;color:var(--ink)}
+  .field input:focus{outline:2.5px solid var(--primary);outline-offset:1px;border-color:transparent}
+  .form-row{display:flex;gap:12px}
+  .form-row .field{flex:1}
+
+  .nav-row{display:flex;align-items:center;gap:12px;margin-top:20px}
+  .nav-row .btn:last-child{margin-left:auto}
+
+  /* success */
+  .ok{text-align:center;padding:14px 6px 4px}
+  .ok-ring{width:84px;height:84px;margin:0 auto 16px}
+  .ok-ring circle{fill:none;stroke:var(--success);stroke-width:5}
+  .ok-ring .bg{stroke:var(--success-soft)}
+  .ok-ring .fg{stroke-dasharray:239;stroke-dashoffset:239;stroke-linecap:round;animation:draw .6s .1s ease forwards}
+  .ok-ring path{fill:none;stroke:var(--success);stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:draw .35s .55s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .ok h2{font-family:var(--display);font-size:23px;font-weight:700;letter-spacing:-.01em}
+  .ok>p{color:var(--muted);font-size:14px;margin:5px 0 18px}
+  .ok-note{display:inline-flex;align-items:center;gap:8px;background:var(--success-soft);color:var(--success);font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:30px;margin-bottom:18px}
+  .cal-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+  .cal-btn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--surface);border-radius:11px;padding:10px 15px;font-size:13px;font-weight:600;cursor:pointer;transition:.12s;box-shadow:var(--shadow-s)}
+  .cal-btn:hover{border-color:var(--primary);color:var(--primary)}
+
+  /* ---------- Panel ---------- */
+  .pgrid{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .stat{background:var(--surface);border-radius:var(--radius-s);box-shadow:var(--shadow-s);padding:15px 16px}
+  .stat .sl{font-size:12px;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:6px}
+  .stat .sv{font-family:var(--display);font-size:24px;font-weight:700;letter-spacing:-.01em;margin-top:5px;line-height:1}
+  .stat .sx{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .stat.k1 .sv{color:var(--primary)} .stat.k2 .sv{color:var(--teal)} .stat.k3 .sv{color:var(--success)}
+
+  .pfilter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .pf{border:1.5px solid var(--line);background:var(--surface);border-radius:30px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:8px;transition:.12s;box-shadow:var(--shadow-s)}
+  .pf .pd{width:9px;height:9px;border-radius:50%}
+  .pf.on{border-color:var(--ink);color:var(--ink)}
+
+  .agenda .ag-row{display:flex;gap:14px;padding:13px 0;border-top:1px solid var(--line)}
+  .agenda .ag-row:first-child{border-top:none}
+  .ag-time{font-family:var(--display);font-weight:700;font-size:14px;width:50px;flex:none;padding-top:2px}
+  .ag-time small{display:block;font-size:10.5px;color:var(--muted);font-weight:500}
+  .ag-bar{width:3px;border-radius:3px;flex:none}
+  .ag-body{flex:1;min-width:0}
+  .ag-svc{font-weight:600;font-size:14.5px}
+  .ag-meta{font-size:12.5px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .ag-pill{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--surface-2);color:var(--muted)}
+  .ag-price{font-family:var(--display);font-weight:700;font-size:13.5px;color:var(--ink)}
+  .ag-acts{display:flex;gap:6px;align-items:flex-start}
+  .ag-act{border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 10px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:.12s}
+  .ag-act:hover{border-color:var(--primary);color:var(--primary)}
+  .ag-act.danger:hover{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+  .ag-row.cancelled{opacity:.5}
+  .ag-row.cancelled .ag-svc{text-decoration:line-through}
+  .ag-canceltag{font-size:11px;font-weight:600;color:var(--warn);background:var(--warn-soft);padding:2px 9px;border-radius:20px}
+
+  .side-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px}
+  .side-card h4{font-family:var(--display);font-size:14px;font-weight:700;margin-bottom:3px}
+  .side-card .sc-sub{font-size:12px;color:var(--muted);margin-bottom:13px}
+  .mini-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line)}
+  .mini-row:first-of-type{border-top:none}
+  .mini-row .mn{font-size:13.5px;font-weight:600}
+  .mini-row .mx{font-size:12px;color:var(--muted)}
+  .mini-row .mr{margin-left:auto;text-align:right;font-size:12px;color:var(--muted)}
+  .mini-row .mr b{display:block;font-family:var(--display);font-size:13px;color:var(--ink)}
+
+  .empty-day{text-align:center;color:var(--muted);padding:38px 16px}
+  .empty-day .ic{font-size:30px;display:block;margin-bottom:9px;opacity:.55}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13.5px;font-weight:500;padding:13px 22px;border-radius:30px;z-index:60;box-shadow:0 10px 30px rgba(0,0,0,.2);animation:up .25s ease}
+  @keyframes up{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+
+  .ftr{text-align:center;color:var(--muted);font-size:12px;margin-top:34px;line-height:1.7}
+  .ftr b{color:var(--ink);font-weight:600}
+
+  @media(max-width:880px){
+    .pgrid{grid-template-columns:1fr}
+    .stat-row{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:560px){
+    .wrap{padding:20px 14px 70px}
+    .svc-grid{grid-template-columns:repeat(2,1fr)}
+    .tabs{order:3;margin-left:0;width:100%}
+    .tabs button{flex:1;justify-content:center}
+    .form-row{flex-direction:column;gap:0}
+    .h-lead{font-size:22px}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+  <div id="root"><div class="boot">Carregando o Marca…</div></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/htm@3/dist/htm.umd.js"></script>
+  <script>
+const {useState, useEffect, useMemo} = React;
+const html = htm.bind(React.createElement);
+
+/* ---------------- dados de exemplo (o tenant "Bella Studio") ---------------- */
+const SERVICES = [
+  {id:'corte', nome:'Corte de cabelo', dur:45, preco:70,  emo:'✂️'},
+  {id:'barba', nome:'Barba',           dur:30, preco:40,  emo:'🪒'},
+  {id:'combo', nome:'Corte + Barba',   dur:75, preco:100, emo:'💈'},
+  {id:'color', nome:'Coloração',       dur:90, preco:180, emo:'🎨'},
+  {id:'hidra', nome:'Hidratação',      dur:60, preco:120, emo:'💧'},
+  {id:'mani',  nome:'Manicure',        dur:45, preco:55,  emo:'💅'},
+];
+const SVC = Object.fromEntries(SERVICES.map(s=>[s.id,s]));
+
+const PROS = [
+  {id:'marina',  nome:'Marina Alves',  role:'Cabeleireira',        cor:'#4F46E5', ini:'MA', days:[1,2,3,4,5,6], start:9,  end:18, lunch:[12,13], svc:['corte','color','hidra','combo']},
+  {id:'rafael',  nome:'Rafael Souza',  role:'Barbeiro',            cor:'#0EA5A4', ini:'RS', days:[2,3,4,5,6],   start:10, end:19, lunch:[13,14], svc:['corte','barba','combo']},
+  {id:'juliana', nome:'Juliana Costa', role:'Estética & Unhas',    cor:'#E0529C', ini:'JC', days:[1,2,3,4,5],   start:8,  end:17, lunch:[12,13], svc:['hidra','mani','color']},
+];
+const PRO = Object.fromEntries(PROS.map(p=>[p.id,p]));
+
+/* ---------------- helpers ---------------- */
+const BRL = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const money = v => BRL.format(v);
+const pad = n => String(n).padStart(2,'0');
+const hm = min => pad(Math.floor(min/60))+':'+pad(min%60);
+function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function fromISO(iso){ return new Date(iso+'T00:00:00'); }
+const WD = ['dom','seg','ter','qua','qui','sex','sáb'];
+const MON = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function longDate(iso){ const d=fromISO(iso); return WD[d.getDay()]+', '+d.getDate()+' de '+['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'][d.getMonth()]; }
+const uid = () => 'b'+Math.random().toString(36).slice(2,9);
+
+/* gera os horários livres de um profissional, num dia, para um serviço */
+function genSlots(pro, iso, dur, bookings){
+  if(!pro) return [];
+  const day = fromISO(iso).getDay();
+  if(!pro.days.includes(day)) return [];
+  const start=pro.start*60, end=pro.end*60, lS=pro.lunch[0]*60, lE=pro.lunch[1]*60;
+  const taken = new Set(bookings.filter(b=>b.proId===pro.id && b.date===iso && b.status==='confirmado').map(b=>b.time));
+  const now = new Date(); const isToday = iso===isoOf(now); const nowMin = now.getHours()*60+now.getMinutes();
+  const out=[];
+  for(let t=start; t+dur<=end; t+=dur){
+    if(t < lE && t+dur > lS) continue;             // colide com o almoço
+    const time = hm(t);
+    out.push({time, taken:taken.has(time), past: isToday && t < nowMin});
+  }
+  return out;
+}
+/* próximo horário livre de um profissional, nos próximos 14 dias */
+function nextFree(pro, dur, bookings){
+  const base=new Date();
+  for(let i=0;i<14;i++){
+    const iso=isoOf(addDays(base,i));
+    const free=genSlots(pro,iso,dur,bookings).find(s=>!s.taken && !s.past);
+    if(free) return {iso, time:free.time, i};
+  }
+  return null;
+}
+
+/* ---------------- seed ---------------- */
+function seed(){
+  const d0=isoOf(new Date()), d1=isoOf(addDays(new Date(),1)), d2=isoOf(addDays(new Date(),2));
+  const mk=(date,time,serviceId,proId,cliente,fone)=>({id:uid(),date,time,serviceId,proId,cliente,fone,status:'confirmado',ts:0});
+  return [
+    mk(d0,'09:00','corte','marina','João Pereira','(11) 99812-3344'),
+    mk(d0,'10:00','combo','rafael','Pedro Lima','(11) 99655-1020'),
+    mk(d0,'11:00','mani','juliana','Ana Beatriz','(11) 99777-8890'),
+    mk(d0,'14:00','color','marina','Bianca Reis','(11) 99123-4567'),
+    mk(d0,'15:00','barba','rafael','Lucas Martins','(11) 99090-1122'),
+    mk(d1,'09:00','corte','marina','Carla Souza','(11) 99887-6655'),
+    mk(d1,'16:00','hidra','juliana','Marina Dias','(11) 99334-2211'),
+    mk(d2,'10:00','corte','rafael','Diego Alves','(11) 99765-4321'),
+  ];
+}
+
+/* =================================================================== */
+function App(){
+  const [tab,setTab]=useState('agendar');
+  const [bookings,setBookings]=useState(()=>{ try{ const r=JSON.parse(localStorage.getItem('marca-bookings')); return Array.isArray(r)?r:seed(); }catch(e){ return seed(); } });
+  const [toast,setToast]=useState(null);
+  useEffect(()=>{ try{ localStorage.setItem('marca-bookings',JSON.stringify(bookings)); }catch(e){} },[bookings]);
+
+  const [panelDate,setPanelDate]=useState(isoOf(new Date()));
+
+  const showToast = t => { setToast(t); clearTimeout(window.__t); window.__t=setTimeout(()=>setToast(null),2200); };
+
+  return html`
+    <${React.Fragment}>
+      <header className="hdr">
+        <div className="hdr-in">
+          <div className="brand">
+            <div className="mark" aria-hidden="true"></div>
+            <div><b>Marca</b><small>agendamento online</small></div>
+          </div>
+          <div className="tenant" title="No produto real, cada negócio tem sua própria conta (multi-tenant)">
+            <span className="tav">BS</span>
+            <div><div className="tn">Bella Studio</div><div className="tc">cabelo & estética</div></div>
+          </div>
+          <div className="tabs">
+            <button className=${tab==='agendar'?'on':''} onClick=${()=>setTab('agendar')}>📅 Agendar</button>
+            <button className=${tab==='painel'?'on':''} onClick=${()=>setTab('painel')}>📊 Painel</button>
+          </div>
+        </div>
+      </header>
+
+      <main className="wrap">
+        ${tab==='agendar'
+          ? html`<${Booking} bookings=${bookings} setBookings=${setBookings} toast=${showToast}
+                    goPanel=${(d)=>{setPanelDate(d);setTab('painel');}} />`
+          : html`<${Panel} bookings=${bookings} setBookings=${setBookings} toast=${showToast}
+                    date=${panelDate} setDate=${setPanelDate} />`}
+
+        <p className="ftr">
+          <b>Protótipo demonstrativo</b> — fluxo de agendamento de ponta a ponta, em React.<br/>
+          Dados fictícios, salvos só neste navegador. Não é o produto final.
+        </p>
+      </main>
+
+      ${toast ? html`<div className="toast">${toast}</div>` : null}
+    <//>`;
+}
+
+/* ---------------- Fluxo do cliente ---------------- */
+function Booking({bookings,setBookings,toast,goPanel}){
+  const [step,setStep]=useState(1);
+  const [serviceId,setServiceId]=useState(null);
+  const [proId,setProId]=useState(null);
+  const [date,setDate]=useState(null);
+  const [time,setTime]=useState(null);
+  const [nome,setNome]=useState('');
+  const [fone,setFone]=useState('');
+  const [confirmed,setConfirmed]=useState(null);
+
+  const service = serviceId?SVC[serviceId]:null;
+  const pro = proId?PRO[proId]:null;
+  const elig = useMemo(()=> service ? PROS.filter(p=>p.svc.includes(service.id)) : [], [serviceId]);
+  const slots = useMemo(()=> (pro&&date&&service)?genSlots(pro,date,service.dur,bookings):[], [proId,date,serviceId,bookings]);
+
+  const reset=()=>{ setStep(1);setServiceId(null);setProId(null);setDate(null);setTime(null);setNome('');setFone('');setConfirmed(null); };
+  const goto=(s)=>{ if(s<=step) setStep(s); };
+
+  const pickService=id=>{ setServiceId(id); setProId(null);setDate(null);setTime(null); setStep(2); };
+  const pickPro=id=>{ setProId(id); setDate(null);setTime(null); setStep(3); };
+  const pickDate=iso=>{ setDate(iso); setTime(null); setStep(4); };
+  const pickTime=t=>{ setTime(t); setStep(5); };
+
+  function confirm(){
+    if(!nome.trim()){ toast('Informe o nome do cliente'); return; }
+    const bk={id:uid(),date,time,serviceId,proId,cliente:nome.trim(),fone:fone.trim()||'—',status:'confirmado',ts:Date.now()};
+    setBookings(b=>[...b,bk]);
+    setConfirmed(bk);
+    setStep(6);
+  }
+
+  if(step===6 && confirmed) return html`<${Success} bk=${confirmed} onNew=${reset} onPanel=${()=>goPanel(confirmed.date)} toast=${toast}/>`;
+
+  const STEP_LABELS=['Serviço','Profissional','Data','Horário','Confirmar'];
+
+  return html`
+    <div className="flow">
+      <div style=${{textAlign:'center'}}>
+        <div className="eyebrow">Bella Studio</div>
+        <div className="h-lead">Agende seu horário</div>
+        <div className="h-sub">Escolha o serviço, o profissional e o melhor horário pra você.</div>
+      </div>
+
+      <div className="steps">
+        ${STEP_LABELS.map((lb,i)=>{ const n=i+1; const cls=step===n?'on':(step>n?'done':'');
+          return html`<${React.Fragment} key=${lb}>
+            ${i>0?html`<div className="ln"></div>`:null}
+            <div className=${'stp '+cls}><span className="n">${step>n?'✓':n}</span><span className="lb">${lb}</span></div>
+          <//>`; })}
+      </div>
+
+      ${step>1 ? html`<div className="summary">
+        ${service?html`<button className="sm-chip" onClick=${()=>goto(1)}><span className="k">Serviço:</span> ${service.emo} ${service.nome}</button>`:null}
+        ${pro?html`<button className="sm-chip" onClick=${()=>goto(2)}><span className="k">Com:</span> ${pro.nome}</button>`:null}
+        ${date?html`<button className="sm-chip" onClick=${()=>goto(3)}><span className="k">Dia:</span> ${longDate(date)}</button>`:null}
+        ${time?html`<button className="sm-chip" onClick=${()=>goto(4)}><span className="k">Hora:</span> ${time}</button>`:null}
+      </div>`:null}
+
+      <div className="card">
+        ${step===1?html`<${StepService} sel=${serviceId} onPick=${pickService}/>`:null}
+        ${step===2?html`<${StepPro} elig=${elig} service=${service} bookings=${bookings} sel=${proId} onPick=${pickPro} onBack=${()=>setStep(1)}/>`:null}
+        ${step===3?html`<${StepDate} pro=${pro} sel=${date} onPick=${pickDate} onBack=${()=>setStep(2)}/>`:null}
+        ${step===4?html`<${StepTime} slots=${slots} pro=${pro} date=${date} sel=${time} onPick=${pickTime} onBack=${()=>setStep(3)}/>`:null}
+        ${step===5?html`<${StepConfirm} service=${service} pro=${pro} date=${date} time=${time}
+              nome=${nome} setNome=${setNome} fone=${fone} setFone=${setFone}
+              onConfirm=${confirm} onBack=${()=>setStep(4)}/>`:null}
+      </div>
+    </div>`;
+}
+
+function StepService({sel,onPick}){
+  return html`<${React.Fragment}>
+    <div className="panel-head"><h2>Qual serviço você quer?</h2><p>Duração e valor já aparecem em cada opção.</p></div>
+    <div className="svc-grid">
+      ${SERVICES.map(s=>html`
+        <button className=${'svc'+(sel===s.id?' sel':'')} key=${s.id} onClick=${()=>onPick(s.id)}>
+          <span className="emo">${s.emo}</span>
+          <div className="nm">${s.nome}</div>
+          <div className="mt"><span className="dur">⏱ ${s.dur} min</span><span className="pr">${money(s.preco)}</span></div>
+        </button>`)}
+    </div>
+  <//>`;
+}
+
+function StepPro({elig,service,bookings,sel,onPick,onBack}){
+  return html`<${React.Fragment}>
+    <div className="panel-head"><h2>Com quem você prefere?</h2><p>Profissionais que fazem ${service.nome.toLowerCase()}.</p></div>
+    <button className=${'pro any'+(sel==='__any'?' sel':'')} onClick=${()=>onPick(elig[0]?.id)}>
+      <div className="av">★</div>
+      <div className="pb"><div className="pn">Sem preferência</div><div className="prl">Pega o horário mais cedo disponível</div></div>
+    </button>
+    ${elig.map(p=>{ const nf=nextFree(p,service.dur,bookings);
+      return html`<button className=${'pro'+(sel===p.id?' sel':'')} key=${p.id} onClick=${()=>onPick(p.id)}>
+        <div className="av" style=${{background:p.cor}}>${p.ini}</div>
+        <div className="pb"><div className="pn">${p.nome}</div><div className="prl">${p.role}</div></div>
+        <div className="nxt">${nf?html`<b>${nf.i===0?'hoje':nf.i===1?'amanhã':WD[fromISO(nf.iso).getDay()]+' '+fromISO(nf.iso).getDate()}</b><span>${nf.time}</span>`:html`<span>sem vaga</span>`}</div>
+      </button>`; })}
+    <div className="nav-row"><button className="btn ghost" onClick=${onBack}>← Voltar</button></div>
+  <//>`;
+}
+
+function StepDate({pro,sel,onPick,onBack}){
+  const base=new Date();
+  const days=Array.from({length:14},(_,i)=>{ const d=addDays(base,i); const iso=isoOf(d); return {iso,d,off:!pro.days.includes(d.getDay())}; });
+  return html`<${React.Fragment}>
+    <div className="panel-head"><h2>Escolha o dia</h2><p>${pro.nome} atende ${pro.days.map(x=>WD[x]).join(', ')} · ${pad(pro.start)}h às ${pad(pro.end)}h</p></div>
+    <div className="dates">
+      ${days.map(({iso,d,off})=>html`
+        <button className=${'day'+(sel===iso?' sel':'')+(off?' off':'')} key=${iso} disabled=${off} onClick=${()=>!off&&onPick(iso)}>
+          <div className="dw">${d.getDay()===new Date().getDay()&&iso===isoOf(new Date())?'hoje':WD[d.getDay()]}</div>
+          <div className="dd">${d.getDate()}</div>
+          <div className="dm">${MON[d.getMonth()]}</div>
+        </button>`)}
+    </div>
+    <div className="nav-row"><button className="btn ghost" onClick=${onBack}>← Voltar</button></div>
+  <//>`;
+}
+
+function StepTime({slots,pro,date,sel,onPick,onBack}){
+  const free=slots.filter(s=>!s.taken&&!s.past);
+  return html`<${React.Fragment}>
+    <div className="panel-head"><h2>Horários de ${longDate(date)}</h2><p>${free.length} ${free.length===1?'horário disponível':'horários disponíveis'} com ${pro.nome}.</p></div>
+    ${slots.length===0
+      ? html`<div className="slot-empty"><span className="ic">📭</span>Sem horários nesse dia. Tente outra data.</div>`
+      : html`<div className="slots">
+          ${slots.map(s=>html`<button className=${'slot'+(sel===s.time?' sel':'')} key=${s.time} disabled=${s.taken||s.past} title=${s.taken?'Já reservado':s.past?'Horário já passou':''} onClick=${()=>onPick(s.time)}>${s.time}</button>`)}
+        </div>`}
+    <div className="nav-row"><button className="btn ghost" onClick=${onBack}>← Voltar</button></div>
+  <//>`;
+}
+
+function StepConfirm({service,pro,date,time,nome,setNome,fone,setFone,onConfirm,onBack}){
+  return html`<${React.Fragment}>
+    <div className="panel-head"><h2>Confirme seu agendamento</h2><p>Revise os detalhes e deixe seu contato.</p></div>
+    <div className="recap">
+      <div className="rr"><span className="ri">${service.emo}</span><span className="rk">Serviço</span><span className="rv">${service.nome} · ${service.dur}min</span></div>
+      <div className="rr"><span className="ri">👤</span><span className="rk">Profissional</span><span className="rv">${pro.nome}</span></div>
+      <div className="rr"><span className="ri">📅</span><span className="rk">Quando</span><span className="rv">${longDate(date)} · ${time}</span></div>
+      <div className="rr"><span className="ri">💳</span><span className="rk">Valor</span><span className="rv tot">${money(service.preco)}</span></div>
+    </div>
+    <div className="form-row">
+      <div className="field"><label>Seu nome</label><input value=${nome} onInput=${e=>setNome(e.target.value)} placeholder="Nome completo" maxLength=${60}/></div>
+      <div className="field"><label>WhatsApp / telefone</label><input value=${fone} onInput=${e=>setFone(e.target.value)} placeholder="(11) 90000-0000" maxLength=${20}/></div>
+    </div>
+    <div className="nav-row">
+      <button className="btn ghost" onClick=${onBack}>← Voltar</button>
+      <button className="btn" onClick=${onConfirm}>Confirmar agendamento</button>
+    </div>
+  <//>`;
+}
+
+function Success({bk,onNew,onPanel,toast}){
+  const s=SVC[bk.serviceId], p=PRO[bk.proId];
+  return html`
+    <div className="flow"><div className="card"><div className="ok">
+      <svg className="ok-ring" viewBox="0 0 84 84">
+        <circle className="bg" cx="42" cy="42" r="38"/>
+        <circle className="fg" cx="42" cy="42" r="38"/>
+        <path d="M27 43 l10 10 l20 -22"/>
+      </svg>
+      <h2>Agendamento confirmado!</h2>
+      <p>${s.nome} com ${p.nome}<br/>${longDate(bk.date)} às ${bk.time}</p>
+      <div className="ok-note">✓ Confirmação enviada por e-mail e WhatsApp</div>
+      <div className="cal-row">
+        <button className="cal-btn" onClick=${()=>toast('Integração com calendário entra na versão final')}>📆 Google Calendar</button>
+        <button className="cal-btn" onClick=${()=>toast('Integração com calendário entra na versão final')}>📧 Outlook</button>
+      </div>
+      <p style=${{fontSize:'12.5px'}}>Você receberá um lembrete automático 24h antes.</p>
+      <div className="nav-row" style=${{justifyContent:'center'}}>
+        <button className="btn ghost" onClick=${onPanel}>Ver no painel →</button>
+        <button className="btn" onClick=${onNew}>Novo agendamento</button>
+      </div>
+    </div></div></div>`;
+}
+
+/* ---------------- Painel do profissional ---------------- */
+function Panel({bookings,setBookings,toast,date,setDate}){
+  const [filter,setFilter]=useState('todos');
+  const base=new Date();
+  const strip=Array.from({length:7},(_,i)=>isoOf(addDays(base,i)));
+
+  const dayAll = bookings.filter(b=>b.date===date);
+  const dayConfirmed = dayAll.filter(b=>b.status==='confirmado');
+  const shown = (filter==='todos'?dayAll:dayAll.filter(b=>b.proId===filter)).slice().sort((a,b)=>a.time.localeCompare(b.time));
+
+  // capacidade do dia (slots de 1h dos profissionais que atendem) → ocupação
+  const dow=fromISO(date).getDay();
+  const capacity=PROS.filter(p=>p.days.includes(dow)).reduce((s,p)=>s+((p.end-p.start)-(p.lunch[1]-p.lunch[0])),0);
+  const booked=dayConfirmed.length;
+  const occ=capacity?Math.round(booked/capacity*100):0;
+  const revenue=dayConfirmed.reduce((s,b)=>s+SVC[b.serviceId].preco,0);
+  const clients=new Set(dayConfirmed.map(b=>b.cliente)).size;
+
+  function cancel(id){ if(!window.confirm('Cancelar este agendamento? O horário fica livre de novo.')) return;
+    setBookings(b=>b.map(x=>x.id===id?{...x,status:'cancelado'}:x)); toast('Agendamento cancelado — horário liberado'); }
+
+  return html`<${React.Fragment}>
+    <div style=${{marginBottom:'16px'}}>
+      <div className="eyebrow">Bella Studio · painel</div>
+      <div className="h-lead">Agenda</div>
+    </div>
+
+    <div className="dates" style=${{marginBottom:'16px'}}>
+      ${strip.map((iso,i)=>{ const d=fromISO(iso); const c=bookings.filter(b=>b.date===iso&&b.status==='confirmado').length;
+        return html`<button className=${'day'+(date===iso?' sel':'')} key=${iso} onClick=${()=>setDate(iso)} style=${{position:'relative'}}>
+          <div className="dw">${i===0?'hoje':WD[d.getDay()]}</div>
+          <div className="dd">${d.getDate()}</div>
+          <div className="dm">${c?c+' agend.':'livre'}</div>
+        </button>`; })}
+    </div>
+
+    <div className="stat-row">
+      <div className="stat k1"><div className="sl">📅 Agendamentos</div><div className="sv">${booked}</div><div className="sx">${longDate(date)}</div></div>
+      <div className="stat k2"><div className="sl">📈 Ocupação</div><div className="sv">${occ}%</div><div className="sx">da agenda do dia</div></div>
+      <div className="stat k3"><div className="sl">💰 Faturamento previsto</div><div className="sv">${money(revenue)}</div><div className="sx">serviços confirmados</div></div>
+      <div className="stat"><div className="sl">🧑 Clientes</div><div className="sv">${clients}</div><div className="sx">atendidos no dia</div></div>
+    </div>
+
+    <div className="pgrid">
+      <div className="card">
+        <div className="pfilter">
+          <button className=${'pf'+(filter==='todos'?' on':'')} onClick=${()=>setFilter('todos')}>Todos</button>
+          ${PROS.map(p=>html`<button className=${'pf'+(filter===p.id?' on':'')} key=${p.id} onClick=${()=>setFilter(p.id)}><span className="pd" style=${{background:p.cor}}></span>${p.nome.split(' ')[0]}</button>`)}
+        </div>
+        ${shown.length===0
+          ? html`<div className="empty-day"><span className="ic">🗓️</span>Nenhum agendamento nesse dia.<br/><span style=${{fontSize:'12.5px'}}>Vá na aba <b>Agendar</b> e crie um — ele aparece aqui na hora.</span></div>`
+          : html`<div className="agenda">
+              ${shown.map(b=>{ const s=SVC[b.serviceId], p=PRO[b.proId]; const end=hm((+b.time.slice(0,2))*60+(+b.time.slice(3))+s.dur); const canc=b.status==='cancelado';
+                return html`<div className=${'ag-row'+(canc?' cancelled':'')} key=${b.id}>
+                  <div className="ag-time">${b.time}<small>${end}</small></div>
+                  <div className="ag-bar" style=${{background:p.cor}}></div>
+                  <div className="ag-body">
+                    <div className="ag-svc">${s.emo} ${s.nome} ${canc?html`<span className="ag-canceltag">cancelado</span>`:null}</div>
+                    <div className="ag-meta">
+                      <span>${b.cliente}</span>·<span>${b.fone}</span>
+                      <span className="ag-pill" style=${{background:p.cor+'1A',color:p.cor}}>${p.nome.split(' ')[0]}</span>
+                      <span className="ag-price">${money(s.preco)}</span>
+                    </div>
+                  </div>
+                  ${canc?null:html`<div className="ag-acts"><button className="ag-act danger" onClick=${()=>cancel(b.id)}>Cancelar</button></div>`}
+                </div>`; })}
+            </div>`}
+      </div>
+
+      <aside>
+        <div className="side-card">
+          <h4>Serviços</h4>
+          <div className="sc-sub">Duração e preço configuráveis pelo dono.</div>
+          ${SERVICES.map(s=>html`<div className="mini-row" key=${s.id}>
+            <div><div className="mn">${s.emo} ${s.nome}</div><div className="mx">${s.dur} min</div></div>
+            <div className="mr"><b>${money(s.preco)}</b></div>
+          </div>`)}
+        </div>
+        <div className="side-card">
+          <h4>Equipe & disponibilidade</h4>
+          <div className="sc-sub">Cada profissional tem seus dias e horários.</div>
+          ${PROS.map(p=>html`<div className="mini-row" key=${p.id}>
+            <div className="av" style=${{background:p.cor,width:'34px',height:'34px',fontSize:'12px'}}>${p.ini}</div>
+            <div><div className="mn">${p.nome}</div><div className="mx">${p.role}</div></div>
+            <div className="mr"><b>${pad(p.start)}–${pad(p.end)}h</b>${p.days.map(x=>WD[x]).join(' ')}</div>
+          </div>`)}
+        </div>
+      </aside>
+    </div>
+  <//>`;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+  </script>
+</body>
+</html>

@@ -11,6 +11,7 @@ independente, com sua própria demo publicada via **GitHub Pages**.
 | [**Luxo On**](luxo-on/) | Blueprint de plataforma concierge de beleza — parâmetros configuráveis, match de profissionais e split de pagamento (Softr/Airtable/Make/Stripe). | [Abrir demo →](https://eduardoeug.github.io/workana/luxo-on/) |
 | [**Bolso**](financas/) | App mobile de finanças pessoais — saldo, gastos por categoria, drill-in nas transações e metas com alerta. | [Abrir demo →](https://eduardoeug.github.io/workana/financas/) |
 | [**Lumo**](loja/) | Loja virtual em React — vitrine responsiva, filtro por categoria e carrinho funcional (alternativa de site próprio ao Wix). | [Abrir demo →](https://eduardoeug.github.io/workana/loja/) |
+| [**Marca**](agenda/) | Plataforma de agendamento online em React — fluxo do cliente (serviço → profissional → data → horário) e painel do profissional (agenda, ocupação, faturamento). | [Abrir demo →](https://eduardoeug.github.io/workana/agenda/) |
 
 > Novos projetos serão adicionados aqui, cada um em sua própria pasta.
 
@@ -32,7 +33,10 @@ workana/
 ├── financas/         ← demo: app mobile de finanças pessoais (Bolso)
 │   ├── README.md
 │   └── index.html
-└── loja/             ← demo: loja virtual em React (Lumo)
+├── loja/             ← demo: loja virtual em React (Lumo)
+│   ├── README.md
+│   └── index.html
+└── agenda/           ← demo: plataforma de agendamento online (Marca)
     ├── README.md
     └── index.html
 ```
