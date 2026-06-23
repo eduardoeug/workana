@@ -1,24 +1,26 @@
-# Norte — organização de estudos e tarefas
+# Projetos Workana
 
-Aplicação web para organizar estudos e tarefas do dia a dia: cadastro de tarefas com
-prioridade e prazo, destaque para atrasadas, lista das próximas em ordem de prazo,
-anel de progresso do dia e acompanhamento de avanço por matéria/projeto.
+Coletânea de projetos e protótipos web. Cada pasta deste repositório é um projeto
+independente, com sua própria demo publicada via **GitHub Pages**.
 
-🔗 **Demo ao vivo:** https://eduardoeug.github.io/workana/norte/
+## Projetos
 
-## Funcionalidades
+| Projeto | Descrição | Demo ao vivo |
+|---------|-----------|--------------|
+| [**Norte**](norte/) | Organização de estudos e tarefas — prioridades, prazos, progresso do dia e por matéria. | [Abrir demo →](https://eduardoeug.github.io/workana/norte/) |
 
-- Tarefas com prioridade (alta / média / baixa) e prazo
-- Destaque automático para tarefas **atrasadas** e do **dia**
-- **Próximas** organizadas em ordem de prazo
-- Anel de **progresso do dia**
-- Acompanhamento de progresso por **matéria/projeto** (sessões de estudo)
-- Interface responsiva (desktop e mobile)
-- Dados salvos localmente no navegador (`localStorage`)
+> Novos projetos serão adicionados aqui, cada um em sua própria pasta.
 
 ## Tecnologia
 
-HTML, CSS e JavaScript puro — sem dependências nem build. Basta abrir o `index.html`.
+Projetos em HTML, CSS e JavaScript puro (sem build), publicados com GitHub Pages.
 
-> Protótipo demonstrativo. A versão de produção contempla backend, contas de usuário e
-> lembretes automáticos.
+## Estrutura
+
+```
+workana/
+├── README.md        ← este índice
+└── norte/           ← demo: organização de estudos e tarefas
+    ├── README.md
+    └── index.html
+```
