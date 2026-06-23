@@ -9,6 +9,7 @@ independente, com sua própria demo publicada via **GitHub Pages**.
 |---------|-----------|--------------|
 | [**Norte**](norte/) | Organização de estudos e tarefas — prioridades, prazos, progresso do dia e por matéria. | [Abrir demo →](https://eduardoeug.github.io/workana/norte/) |
 | [**Luxo On**](luxo-on/) | Blueprint de plataforma concierge de beleza — parâmetros configuráveis, match de profissionais e split de pagamento (Softr/Airtable/Make/Stripe). | [Abrir demo →](https://eduardoeug.github.io/workana/luxo-on/) |
+| [**Bolso**](financas/) | App mobile de finanças pessoais — saldo, gastos por categoria, drill-in nas transações e metas com alerta. | [Abrir demo →](https://eduardoeug.github.io/workana/financas/) |
 
 > Novos projetos serão adicionados aqui, cada um em sua própria pasta.
 
@@ -24,7 +25,10 @@ workana/
 ├── norte/            ← demo: organização de estudos e tarefas
 │   ├── README.md
 │   └── index.html
-└── luxo-on/          ← blueprint: plataforma concierge de beleza
+├── luxo-on/          ← blueprint: plataforma concierge de beleza
+│   ├── README.md
+│   └── index.html
+└── financas/         ← demo: app mobile de finanças pessoais (Bolso)
     ├── README.md
     └── index.html
 ```
