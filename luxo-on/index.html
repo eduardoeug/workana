@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxo On — Blueprint da Plataforma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4EFE9;
+    --surface:#FFFFFF;
+    --surface-2:#FAF6F1;
+    --ink:#211B17;
+    --muted:#8A7F75;
+    --line:#EAE1D6;
+    --gold:#B0894E;
+    --gold-deep:#8F6C36;
+    --gold-soft:#F4E9D6;
+    --rose:#B76E79;
+    --rose-soft:#F7E7E9;
+    --plum:#2E2129;
+    --plum-2:#3D2D37;
+    --ok:#5B7A5B;
+    --ok-soft:#E7EFE6;
+    --radius:18px;
+    --shadow:0 1px 2px rgba(33,27,23,.04), 0 10px 30px rgba(33,27,23,.07);
+    --display:'Playfair Display', Georgia, serif;
+    --body:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  /* ---------- Top bar ---------- */
+  .topbar{background:var(--plum);color:#F4ECE0}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:13px}
+  .logo{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;flex:none;background:linear-gradient(160deg,#3D2D37,#241920)}
+  .logo b{font-family:var(--display);font-weight:800;font-size:20px;color:var(--gold);line-height:1}
+  .brand .nm{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.01em}
+  .brand .tg{font-size:11.5px;color:#C9B79E;letter-spacing:.14em;text-transform:uppercase;margin-top:1px}
+  .topbar .pill{font-size:11.5px;letter-spacing:.04em;color:#E7D9C2;border:1px solid rgba(176,137,78,.5);padding:6px 13px;border-radius:30px}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:46px 0 30px;text-align:center}
+  .hero .kick{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,5vw,46px);line-height:1.08;letter-spacing:-.01em;margin:12px 0 14px}
+  .hero p{max-width:660px;margin:0 auto;color:var(--muted);font-size:15.5px}
+  .stack{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .stack span{font-size:12.5px;font-weight:600;background:var(--surface);border:1px solid var(--line);color:#5C5249;padding:7px 14px;border-radius:30px;box-shadow:var(--shadow)}
+  .stack span b{color:var(--gold-deep);font-weight:700}
+
+  /* ---------- Section ---------- */
+  section.block{padding:18px 0 8px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin:26px 0 16px}
+  .sec-head .no{font-family:var(--display);font-size:15px;color:var(--gold);font-weight:700;border:1.5px solid var(--gold-soft);background:var(--gold-soft);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+  .sec-head h2{font-family:var(--display);font-size:25px;font-weight:700;letter-spacing:-.01em}
+  .sec-head p{font-size:13.5px;color:var(--muted);margin-top:2px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+
+  /* ---------- Params ---------- */
+  .params-note{display:flex;gap:10px;align-items:center;background:var(--gold-soft);border:1px solid #EAD9BC;color:#6E5326;font-size:13px;font-weight:500;padding:11px 15px;border-radius:12px;margin-bottom:20px}
+  .params-note b{color:#5A4115}
+  .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .pgroup{border:1px solid var(--line);border-radius:14px;padding:16px 16px 18px;background:var(--surface-2)}
+  .pgroup h4{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-deep);font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+  .field{margin-bottom:13px}
+  .field:last-child{margin-bottom:0}
+  .field label{display:block;font-size:12.5px;color:var(--muted);font-weight:500;margin-bottom:5px}
+  .field .inwrap{display:flex;align-items:center;gap:8px}
+  .field input[type=number]{width:100%;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 11px;font:inherit;font-size:14px;font-weight:600;color:var(--ink)}
+  .field input:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+  .field .unit{font-size:13px;color:var(--muted);font-weight:600;flex:none}
+  .slider{display:flex;align-items:center;gap:12px}
+  .slider input[type=range]{flex:1;accent-color:var(--gold);height:5px}
+  .slider .val{font-family:var(--display);font-weight:800;font-size:22px;color:var(--gold-deep);min-width:62px;text-align:right}
+  .reset{margin-top:18px;border:1px solid var(--line);background:#fff;color:var(--muted);font:inherit;font-size:12.5px;font-weight:600;padding:8px 15px;border-radius:9px;cursor:pointer;transition:.15s}
+  .reset:hover{border-color:var(--gold);color:var(--gold-deep)}
+
+  /* ---------- Simulator ---------- */
+  .sim-controls{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px;margin-bottom:22px}
+  .sim-controls .field label{font-weight:600;color:#5C5249}
+  .sim-controls select{width:100%;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 12px;font:inherit;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer}
+  .sim-controls select:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+  .sim-grid{display:grid;grid-template-columns:1fr 380px;gap:22px;align-items:start}
+
+  .assigned{border:1.5px solid var(--gold);border-radius:14px;padding:16px 18px;background:linear-gradient(180deg,#FFFDF8,#FBF4E8);margin-bottom:16px}
+  .assigned .lab{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);font-weight:700}
+  .assigned .row{display:flex;align-items:center;gap:13px;margin-top:9px}
+  .av{width:46px;height:46px;border-radius:50%;flex:none;background:var(--plum);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:18px}
+  .assigned .who b{font-family:var(--display);font-size:18px;font-weight:700;display:block;line-height:1.15}
+  .assigned .who small{font-size:12.5px;color:var(--muted)}
+  .assigned .why{font-size:12.5px;color:#6E5326;margin-top:11px;background:var(--gold-soft);padding:8px 11px;border-radius:9px}
+
+  .rank-h{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:4px 2px 10px}
+  .pro{display:flex;align-items:center;gap:12px;padding:11px 6px;border-top:1px solid var(--line)}
+  .pro:first-child{border-top:none}
+  .pro .pos{font-family:var(--display);font-weight:700;color:#C7BBAE;width:18px;text-align:center;flex:none}
+  .pro .pav{width:34px;height:34px;border-radius:50%;flex:none;background:var(--surface-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#7A6E63}
+  .pro .pb{flex:1;min-width:0}
+  .pro .pb b{font-size:14px;font-weight:600;display:block}
+  .pro .pb small{font-size:12px;color:var(--muted)}
+  .pro .pd{text-align:right;flex:none}
+  .pro .pd .fee{font-size:13px;font-weight:700;color:var(--ink)}
+  .pro .pd .km{font-size:11px;color:var(--muted)}
+
+  .tier{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.03em;white-space:nowrap}
+  .t-Premium{background:var(--gold-soft);color:var(--gold-deep)}
+  .t-Verificada{background:var(--rose-soft);color:#9A4F5A}
+  .t-Parceira{background:#EFEAE3;color:#7A6E63}
+
+  /* finance */
+  .panel{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .panel .ph{background:var(--plum);color:#F2E8DA;padding:13px 16px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+  .panel .ph .chip{font-family:var(--body);font-size:10.5px;color:#D8C09A;border:1px solid rgba(176,137,78,.5);padding:3px 9px;border-radius:20px;letter-spacing:.04em;text-transform:none;font-weight:600}
+  .li{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;font-size:13.5px;border-top:1px solid var(--line)}
+  .li:first-child{border-top:none}
+  .li .k{color:#5C5249}
+  .li .k small{display:block;color:var(--muted);font-size:11px;font-weight:500}
+  .li .v{font-weight:600;font-variant-numeric:tabular-nums}
+  .li.total{background:var(--surface-2);font-weight:700}
+  .li.total .v{font-family:var(--display);font-size:18px;color:var(--ink)}
+  .split{padding:14px 16px;border-top:2px solid var(--line);background:#fff}
+  .split .st{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px}
+  .sbar{display:flex;height:14px;border-radius:8px;overflow:hidden;margin-bottom:11px;border:1px solid var(--line)}
+  .sbar i{display:block;height:100%}
+  .sbar .a{background:var(--gold)}
+  .sbar .b{background:var(--rose)}
+  .slegend{display:flex;flex-direction:column;gap:8px}
+  .slegend .sl{display:flex;align-items:center;gap:9px;font-size:13px}
+  .slegend .dot{width:11px;height:11px;border-radius:3px;flex:none}
+  .slegend .sl .v{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+  .slegend .sl small{color:var(--muted);font-weight:500}
+
+  /* ---------- Data model ---------- */
+  .dm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .tbl{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .tbl.key{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),var(--shadow)}
+  .tbl .th{display:flex;align-items:center;gap:9px;padding:13px 15px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  .tbl.key .th{background:var(--gold-soft)}
+  .tbl .th .ic{width:24px;height:24px;border-radius:7px;background:var(--plum);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+  .tbl.key .th .ic{background:var(--gold);color:#fff}
+  .tbl .th b{font-size:14px;font-weight:700}
+  .tbl ul{list-style:none;padding:10px 15px 14px}
+  .tbl li{font-size:12.5px;color:#5C5249;padding:4px 0;display:flex;align-items:center;gap:7px}
+  .tbl li .f{width:5px;height:5px;border-radius:50%;background:#CFC3B4;flex:none}
+  .tbl li.calc{color:var(--gold-deep);font-weight:600}
+  .tbl li.calc .f{background:var(--gold)}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .legend .f{width:7px;height:7px;border-radius:50%}
+
+  .callout{display:flex;gap:12px;align-items:flex-start;margin-top:18px;background:var(--plum);color:#EDE2D2;border-radius:14px;padding:16px 18px}
+  .callout .ic{font-size:18px;flex:none;color:var(--gold)}
+  .callout b{color:#fff}
+  .callout p{font-size:13.5px}
+
+  /* ---------- Tiers ---------- */
+  .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .tcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;position:relative;overflow:hidden}
+  .tcard::before{content:"";position:absolute;top:0;left:0;right:0;height:4px}
+  .tcard.p3::before{background:var(--gold)}
+  .tcard.p2::before{background:var(--rose)}
+  .tcard.p1::before{background:#CFC3B4}
+  .tcard .nm{font-family:var(--display);font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+  .tcard .ct{font-size:13px;color:var(--muted);margin:8px 0 14px;min-height:38px}
+  .tcard .ct b{color:var(--ink);font-weight:600}
+  .tcard .cnt{font-size:12.5px;color:#5C5249;border-top:1px solid var(--line);padding-top:12px;display:flex;align-items:center;gap:7px}
+  .tcard .cnt b{font-family:var(--display);font-size:17px;color:var(--gold-deep)}
+
+  /* ---------- Footer ---------- */
+  footer{margin-top:40px;border-top:1px solid var(--line);padding:26px 0 50px;text-align:center;color:var(--muted);font-size:12.5px}
+  footer b{color:#5C5249;font-weight:600}
+  footer .dis{margin-top:6px;font-size:11.5px}
+
+  @media (max-width:900px){
+    .pgrid,.dm-grid,.tier-grid{grid-template-columns:1fr 1fr}
+    .sim-grid{grid-template-columns:1fr}
+    .sim-controls{grid-template-columns:1fr}
+  }
+  @media (max-width:600px){
+    .pgrid,.dm-grid,.tier-grid{grid-template-columns:1fr}
+    .topbar .pill{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo"><b>L</b></div>
+        <div>
+          <div class="nm">Luxo On</div>
+          <div class="tg">Concierge de Beleza</div>
+        </div>
+      </div>
+      <div class="pill">Blueprint técnico · rascunho interativo</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="kick">Proposta de arquitetura</div>
+      <h1>Como eu construiria a plataforma Luxo On</h1>
+      <p>Um rascunho funcional do que está por trás das telas: o modelo de dados no Airtable,
+      um painel onde todas as regras do negócio são configuráveis, e uma simulação do fluxo da
+      cliente que recalcula match, taxa de deslocamento e split de pagamento em tempo real.</p>
+      <div class="stack">
+        <span><b>Softr</b> interface</span>
+        <span><b>Airtable</b> dados</span>
+        <span><b>Make</b> automações</span>
+        <span><b>Stripe Connect</b> split</span>
+        <span><b>WhatsApp</b> comunicação</span>
+      </div>
+    </div>
+
+    <!-- ====== 1. PARÂMETROS ====== -->
+    <section class="block">
+      <div class="sec-head">
+        <div class="no">1</div>
+        <div>
+          <h2>Parâmetros do negócio</h2>
+          <p>Mexa em qualquer número abaixo e veja o restante da página reagir.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="params-note">
+          <span>⚙️</span>
+          <span>Nada disto fica chumbado no código. Tudo vive numa tabela de <b>Parâmetros</b> no Airtable — a Luxo On ajusta comissão, taxas e os critérios dos níveis a qualquer momento, <b>sem depender de desenvolvedor</b>.</span>
+        </div>
+
+        <div class="pgrid">
+          <div class="pgroup">
+            <h4>💰 Financeiro</h4>
+            <div class="field">
+              <label>Comissão sobre o serviço</label>
+              <div class="slider">
+                <input type="range" id="p_com" min="0" max="30" step="0.5" value="15">
+                <span class="val" id="p_com_v">15%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Taxa de serviço fixa (por atendimento)</label>
+              <div class="inwrap"><span class="unit">R$</span><input type="number" id="p_fix" min="0" step="0.01" value="2.99"></div>
+            </div>
+          </div>
+
+          <div class="pgroup">
+            <h4>🚗 Deslocamento</h4>
+            <div class="field">
+              <label>Valor base (domicílio)</label>
+              <div class="inwrap"><span class="unit">R$</span><input type="number" id="p_base" min="0" step="0.5" value="6"></div>
+            </div>
+            <div class="field">
+              <label>Adicional por distância</label>
+              <div class="inwrap"><span class="unit">R$</span><input type="number" id="p_km" min="0" step="0.5" value="2.5"></div>
+            </div>
+            <div class="field" style="font-size:11.5px;color:var(--muted)">Cobrança = média das <b>3 profissionais elegíveis mais próximas</b>.</div>
+          </div>
+
+          <div class="pgroup">
+            <h4>⭐ Critérios dos níveis</h4>
+            <div class="field">
+              <label>Verificada — mín. atendimentos / nota</label>
+              <div class="inwrap"><input type="number" id="p_vmin" min="0" step="1" value="5"><input type="number" id="p_vnota" min="0" max="5" step="0.1" value="4.5"></div>
+            </div>
+            <div class="field">
+              <label>Premium — atend. / nota / presença %</label>
+              <div class="inwrap"><input type="number" id="p_pmin" min="0" step="1" value="20"><input type="number" id="p_pnota" min="0" max="5" step="0.1" value="4.8"><input type="number" id="p_pcomp" min="0" max="100" step="1" value="95"></div>
+            </div>
+          </div>
+        </div>
+        <button class="reset" id="resetBtn">↺ Restaurar valores do briefing</button>
+      </div>
+    </section>
+
+    <!-- ====== 2. SIMULADOR ====== -->
+    <section class="block">
+      <div class="sec-head">
+        <div class="no">2</div>
+        <div>
+          <h2>Simulação do atendimento</h2>
+          <p>O caminho da cliente: escolhe o serviço e o sistema cuida do resto.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sim-controls">
+          <div class="field">
+            <label>Serviço desejado</label>
+            <select id="s_svc"></select>
+          </div>
+          <div class="field">
+            <label>Zona da cliente</label>
+            <select id="s_zona"></select>
+          </div>
+          <div class="field">
+            <label>Local do atendimento</label>
+            <select id="s_local">
+              <option value="domicilio">Em domicílio</option>
+              <option value="espaco">No espaço da profissional</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sim-grid">
+          <div>
+            <div id="assignedBox"></div>
+            <div class="rank-h">Fila de atribuição (nível → equilíbrio de carga → proximidade)</div>
+            <div id="rankList"></div>
+          </div>
+          <div id="financeBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 3. MODELO DE DADOS ====== -->
+    <section class="block">
+      <div class="sec-head">
+        <div class="no">3</div>
+        <div>
+          <h2>Modelo de dados no Airtable</h2>
+          <p>As tabelas e como elas se conversam. Os níveis e médias são campos calculados.</p>
+        </div>
+      </div>
+      <div class="dm-grid">
+        <div class="tbl">
+          <div class="th"><span class="ic">👤</span><b>Clientes</b></div>
+          <ul>
+            <li><span class="f"></span>Nome</li>
+            <li><span class="f"></span>WhatsApp</li>
+            <li><span class="f"></span>Endereço</li>
+            <li><span class="f"></span>Zona <em>(link → Zonas)</em></li>
+          </ul>
+        </div>
+        <div class="tbl">
+          <div class="th"><span class="ic">💇</span><b>Profissionais</b></div>
+          <ul>
+            <li><span class="f"></span>Nome · contato</li>
+            <li><span class="f"></span>Categorias atendidas</li>
+            <li><span class="f"></span>Zona base · status</li>
+            <li class="calc"><span class="f"></span>Nº atendimentos ✦ rollup</li>
+            <li class="calc"><span class="f"></span>Nota média ✦ rollup</li>
+            <li class="calc"><span class="f"></span>% comparecimento ✦ fórmula</li>
+            <li class="calc"><span class="f"></span>Nível ✦ fórmula</li>
+          </ul>
+        </div>
+        <div class="tbl">
+          <div class="th"><span class="ic">✂️</span><b>Serviços</b></div>
+          <ul>
+            <li><span class="f"></span>Nome</li>
+            <li><span class="f"></span>Categoria</li>
+            <li><span class="f"></span>Preço base</li>
+            <li><span class="f"></span>Duração</li>
+          </ul>
+        </div>
+        <div class="tbl">
+          <div class="th"><span class="ic">📍</span><b>Zonas</b></div>
+          <ul>
+            <li><span class="f"></span>Nome <em>(Centro, Cumbica…)</em></li>
+            <li><span class="f"></span>Região / referência</li>
+            <li class="calc"><span class="f"></span>Custo de deslocamento ✦</li>
+          </ul>
+        </div>
+        <div class="tbl">
+          <div class="th"><span class="ic">📅</span><b>Atendimentos</b></div>
+          <ul>
+            <li><span class="f"></span>Cliente · Profissional</li>
+            <li><span class="f"></span>Serviço · Zona · Data/hora</li>
+            <li><span class="f"></span>Local (domicílio/espaço)</li>
+            <li><span class="f"></span>Status · presença</li>
+            <li class="calc"><span class="f"></span>Valor · comissão · repasse ✦</li>
+          </ul>
+        </div>
+        <div class="tbl key">
+          <div class="th"><span class="ic">⚙️</span><b>Parâmetros</b></div>
+          <ul>
+            <li class="calc"><span class="f"></span>Comissão % · taxa fixa</li>
+            <li class="calc"><span class="f"></span>Base · adicional deslocamento</li>
+            <li class="calc"><span class="f"></span>Critérios Verificada</li>
+            <li class="calc"><span class="f"></span>Critérios Premium</li>
+            <li style="color:var(--muted);font-weight:500"><span class="f" style="background:transparent"></span>Tudo o que você ajusta acima ↑</li>
+          </ul>
+        </div>
+      </div>
+      <div class="legend">
+        <span><span class="f" style="background:#CFC3B4"></span> Campo de entrada</span>
+        <span><span class="f" style="background:var(--gold)"></span> ✦ Campo calculado (fórmula / rollup)</span>
+      </div>
+
+      <div class="callout">
+        <span class="ic">↗</span>
+        <p><b>Pronto para virar marketplace.</b> A mesma base sustenta a evolução: hoje a Luxo On
+        faz a curadoria; amanhã, é só liberar a própria fila de ranqueadas para a cliente escolher.
+        Nenhuma migração de dados, só uma mudança de regra.</p>
+      </div>
+    </section>
+
+    <!-- ====== 4. NÍVEIS ====== -->
+    <section class="block">
+      <div class="sec-head">
+        <div class="no">4</div>
+        <div>
+          <h2>Níveis das profissionais</h2>
+          <p>Recalculados automaticamente a partir dos critérios definidos no painel.</p>
+        </div>
+      </div>
+      <div class="tier-grid" id="tierGrid"></div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <b>Luxo On</b> · rascunho técnico interativo
+      <div class="dis">Dados e profissionais fictícios, apenas para demonstração da arquitetura proposta. Não é o produto final.</div>
+    </div>
+  </footer>
+
+<script>
+// ---------------- Dados (fictícios) ----------------
+const ZONES = {
+  'Centro':      {x:0.0, y:0.0},
+  'Vila Galvão': {x:1.0, y:2.4},
+  'Picanço':     {x:2.2, y:1.0},
+  'Taboão':      {x:3.0, y:3.2},
+  'Cumbica':     {x:4.2, y:1.2},
+  'Bonsucesso':  {x:5.5, y:4.2}
+};
+
+const SERVICES = [
+  {id:'corte', nome:'Corte & Escova',        cat:'Cabelo',    preco:120},
+  {id:'color', nome:'Coloração',             cat:'Cabelo',    preco:260},
+  {id:'mani',  nome:'Manicure & Pedicure',   cat:'Unhas',     preco:90},
+  {id:'maq',   nome:'Maquiagem',             cat:'Maquiagem', preco:180},
+  {id:'pele',  nome:'Limpeza de Pele',       cat:'Estética',  preco:160},
+  {id:'massa', nome:'Massagem Relaxante',    cat:'Bem-estar', preco:200}
+];
+
+const PROS = [
+  {nome:'Marina Teixeira',  cat:'Cabelo',    zona:'Centro',      atend:32, nota:4.9,  comp:97,   carga:2},
+  {nome:'Aline Souza',      cat:'Cabelo',    zona:'Picanço',     atend:12, nota:4.6,  comp:92,   carga:1},
+  {nome:'Bruna Martins',    cat:'Cabelo',    zona:'Taboão',      atend:3,  nota:4.4,  comp:88,   carga:0},
+  {nome:'Larissa Gomes',    cat:'Cabelo',    zona:'Bonsucesso',  atend:21, nota:4.81, comp:95.5, carga:2},
+  {nome:'Camila Rocha',     cat:'Unhas',     zona:'Vila Galvão', atend:25, nota:4.85, comp:96,   carga:3},
+  {nome:'Daniela Lima',     cat:'Unhas',     zona:'Centro',      atend:7,  nota:4.7,  comp:94,   carga:1},
+  {nome:'Renata Lopes',     cat:'Unhas',     zona:'Cumbica',     atend:2,  nota:4.2,  comp:80,   carga:0},
+  {nome:'Eduarda Nunes',    cat:'Maquiagem', zona:'Bonsucesso',  atend:41, nota:4.95, comp:99,   carga:4},
+  {nome:'Fernanda Alves',   cat:'Maquiagem', zona:'Cumbica',     atend:9,  nota:4.55, comp:90,   carga:1},
+  {nome:'Tatiane Vieira',   cat:'Maquiagem', zona:'Centro',      atend:23, nota:4.83, comp:96,   carga:2},
+  {nome:'Gabriela Dias',    cat:'Estética',  zona:'Picanço',     atend:22, nota:4.82, comp:96,   carga:2},
+  {nome:'Helena Castro',    cat:'Estética',  zona:'Taboão',      atend:4,  nota:4.3,  comp:85,   carga:0},
+  {nome:'Patrícia Mendes',  cat:'Estética',  zona:'Centro',      atend:11, nota:4.6,  comp:93,   carga:1},
+  {nome:'Isabela Reis',     cat:'Bem-estar', zona:'Centro',      atend:28, nota:4.88, comp:98,   carga:3},
+  {nome:'Juliana Prado',    cat:'Bem-estar', zona:'Cumbica',     atend:6,  nota:4.6,  comp:91,   carga:1},
+  {nome:'Sofia Ramos',      cat:'Bem-estar', zona:'Taboão',      atend:18, nota:4.75, comp:94,   carga:2}
+];
+
+const DEFAULTS = {com:15, fix:2.99, base:6, km:2.5, vmin:5, vnota:4.5, pmin:20, pnota:4.8, pcomp:95};
+let P = {...DEFAULTS};
+
+// ---------------- Helpers ----------------
+const BRL = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const money = v => BRL.format(v);
+const r2 = n => Math.round(n*100)/100;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const initials = n => n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+
+function dist(a,b){const za=ZONES[a],zb=ZONES[b];return Math.hypot(za.x-zb.x, za.y-zb.y);}
+function travelCost(proZona, cliZona){
+  const d = dist(proZona, cliZona);
+  return r2(P.base + P.km * d);
+}
+function tierOf(p){
+  if(p.atend>=P.pmin && p.nota>=P.pnota && p.comp>=P.pcomp) return 'Premium';
+  if(p.atend>=P.vmin && p.nota>=P.vnota) return 'Verificada';
+  return 'Parceira';
+}
+const TW = {Premium:3, Verificada:2, Parceira:1};
+function mean(arr){return arr.length ? arr.reduce((s,x)=>s+x,0)/arr.length : 0;}
+
+// ---------------- Ler parâmetros ----------------
+function num(id, def){ const v = parseFloat($(id).value); return isFinite(v) ? v : def; }
+function readParams(){
+  P = {
+    com:  num('p_com', DEFAULTS.com),
+    fix:  num('p_fix', DEFAULTS.fix),
+    base: num('p_base', DEFAULTS.base),
+    km:   num('p_km', DEFAULTS.km),
+    vmin: num('p_vmin', DEFAULTS.vmin),
+    vnota:num('p_vnota', DEFAULTS.vnota),
+    pmin: num('p_pmin', DEFAULTS.pmin),
+    pnota:num('p_pnota', DEFAULTS.pnota),
+    pcomp:num('p_pcomp', DEFAULTS.pcomp)
+  };
+  $('p_com_v').textContent = P.com + '%';
+}
+
+// ---------------- Simulação ----------------
+function simulate(){
+  const svc = SERVICES.find(s=>s.id===$('s_svc').value) || SERVICES[0];
+  const cliZona = $('s_zona').value;
+  const local = $('s_local').value;
+  const domic = local === 'domicilio';
+
+  const elig = PROS.filter(p=>p.cat===svc.cat).map(p=>{
+    const tier = tierOf(p);
+    const d = domic ? travelCost(p.zona, cliZona) : 0;
+    return {...p, tier, tw:TW[tier], d, km:dist(p.zona, cliZona)};
+  });
+
+  const ranked = [...elig].sort((a,b)=> b.tw-a.tw || a.carga-b.carga || a.d-b.d || b.nota-a.nota);
+  const nearest3 = [...elig].sort((a,b)=> a.d-b.d).slice(0,3);
+  const fee = domic ? r2(mean(nearest3.map(x=>x.d))) : 0;
+
+  return {svc, cliZona, local, domic, elig, ranked, nearest3, fee};
+}
+
+// ---------------- Render ----------------
+function render(){
+  const sim = simulate();
+  renderAssigned(sim);
+  renderRank(sim);
+  renderFinance(sim);
+  renderTiers();
+}
+
+function renderAssigned(sim){
+  const box = $('assignedBox');
+  if(sim.ranked.length===0){
+    box.innerHTML = `<div class="assigned"><div class="lab">Atribuição</div><div class="why" style="margin-top:9px">Nenhuma profissional disponível para este serviço nesta simulação.</div></div>`;
+    return;
+  }
+  const a = sim.ranked[0];
+  const tierTxt = a.tier==='Premium' ? 'priorizou o nível Premium' : (a.tier==='Verificada' ? 'priorizou o nível Verificada disponível' : 'melhor opção disponível na categoria');
+  box.innerHTML = `
+    <div class="assigned">
+      <div class="lab">Profissional atribuída</div>
+      <div class="row">
+        <div class="av">${esc(initials(a.nome))}</div>
+        <div class="who">
+          <b>${esc(a.nome)}</b>
+          <small>${esc(a.zona)} · nota ${a.nota.toFixed(1)} · ${a.atend} atendimentos</small>
+        </div>
+        <span class="tier t-${a.tier}" style="margin-left:auto">${a.tier}</span>
+      </div>
+      <div class="why">O sistema ${tierTxt} e equilibrou a carga para não concentrar oportunidades sempre nas mesmas profissionais.</div>
+    </div>`;
+}
+
+function renderRank(sim){
+  const box = $('rankList');
+  if(sim.ranked.length===0){ box.innerHTML=''; return; }
+  box.innerHTML = sim.ranked.map((p,i)=>`
+    <div class="pro">
+      <div class="pos">${i+1}</div>
+      <div class="pav">${esc(initials(p.nome))}</div>
+      <div class="pb">
+        <b>${esc(p.nome)} <span class="tier t-${p.tier}">${p.tier}</span></b>
+        <small>${esc(p.zona)} · nota ${p.nota.toFixed(1)} · carga atual ${p.carga}</small>
+      </div>
+      <div class="pd">
+        ${sim.domic ? `<div class="fee">${money(p.d)}</div><div class="km">deslocamento</div>` : `<div class="km">no espaço<br>dela</div>`}
+      </div>
+    </div>`).join('');
+}
+
+function renderFinance(sim){
+  const S = sim.svc.preco;
+  const D = sim.fee;
+  const C = r2(S * P.com/100);
+  const F = r2(P.fix);
+  const clientePaga = r2(S + D + F);
+  const profRecebe = r2(S - C + D);
+  const luxoRecebe = r2(C + F);
+  const tot = profRecebe + luxoRecebe || 1;
+  const aPct = Math.round(luxoRecebe/tot*100);
+  const bPct = 100 - aPct;
+
+  const near = sim.domic
+    ? `<div class="li"><div class="k">Taxa de deslocamento<small>média de ${sim.nearest3.length} mais próxima(s): ${sim.nearest3.map(x=>money(x.d)).join(' · ')}</small></div><div class="v">${money(D)}</div></div>`
+    : `<div class="li"><div class="k">Taxa de deslocamento<small>atendimento no espaço da profissional</small></div><div class="v">${money(0)}</div></div>`;
+
+  $('financeBox').innerHTML = `
+    <div class="panel">
+      <div class="ph">Resumo financeiro <span class="chip">split via Stripe Connect</span></div>
+      <div class="li"><div class="k">Valor do serviço<small>${esc(sim.svc.nome)}</small></div><div class="v">${money(S)}</div></div>
+      ${near}
+      <div class="li"><div class="k">Taxa de serviço<small>fixa por atendimento</small></div><div class="v">${money(F)}</div></div>
+      <div class="li total"><div class="k">A cliente paga</div><div class="v">${money(clientePaga)}</div></div>
+      <div class="split">
+        <div class="st">Divisão automática do pagamento</div>
+        <div class="sbar"><i class="a" style="width:${aPct}%"></i><i class="b" style="width:${bPct}%"></i></div>
+        <div class="slegend">
+          <div class="sl"><span class="dot" style="background:var(--gold)"></span><span>Luxo On <small>(comissão ${P.com}% + taxa)</small></span><span class="v">${money(luxoRecebe)}</span></div>
+          <div class="sl"><span class="dot" style="background:var(--rose)"></span><span>Profissional <small>(serviço − comissão + deslocamento)</small></span><span class="v">${money(profRecebe)}</span></div>
+        </div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:11px;line-height:1.4">A comissão de ${P.com}% incide só sobre o serviço — <b>nunca sobre o deslocamento</b>, que é repassado integral à profissional.</div>
+      </div>
+    </div>`;
+}
+
+function renderTiers(){
+  const counts = {Premium:0, Verificada:0, Parceira:0};
+  PROS.forEach(p=>counts[tierOf(p)]++);
+  $('tierGrid').innerHTML = `
+    <div class="tcard p1">
+      <div class="nm">Parceira <span class="tier t-Parceira">base</span></div>
+      <div class="ct">Cadastro <b>aprovado</b> pela curadoria da Luxo On. Pronta para receber atendimentos.</div>
+      <div class="cnt"><b>${counts.Parceira}</b> profissionais neste nível hoje</div>
+    </div>
+    <div class="tcard p2">
+      <div class="nm">Verificada <span class="tier t-Verificada">+</span></div>
+      <div class="ct">A partir de <b>${P.vmin} atendimentos</b> e nota <b>≥ ${P.vnota.toFixed(1)}</b>.</div>
+      <div class="cnt"><b>${counts.Verificada}</b> profissionais neste nível hoje</div>
+    </div>
+    <div class="tcard p3">
+      <div class="nm">Premium <span class="tier t-Premium">★</span></div>
+      <div class="ct"><b>${P.pmin}+ atendimentos</b>, nota <b>≥ ${P.pnota.toFixed(1)}</b> e presença <b>≥ ${P.pcomp}%</b>. Prioridade na fila.</div>
+      <div class="cnt"><b>${counts.Premium}</b> profissionais neste nível hoje</div>
+    </div>`;
+}
+
+// ---------------- Boot ----------------
+function fillSelects(){
+  $('s_svc').innerHTML = SERVICES.map(s=>`<option value="${s.id}">${esc(s.nome)} — ${money(s.preco)}</option>`).join('');
+  $('s_zona').innerHTML = Object.keys(ZONES).map(z=>`<option value="${esc(z)}">${esc(z)}</option>`).join('');
+}
+
+function bind(){
+  ['p_com','p_fix','p_base','p_km','p_vmin','p_vnota','p_pmin','p_pnota','p_pcomp']
+    .forEach(id=>$(id).addEventListener('input', ()=>{ readParams(); render(); }));
+  ['s_svc','s_zona','s_local'].forEach(id=>$(id).addEventListener('change', render));
+  $('resetBtn').addEventListener('click', ()=>{
+    $('p_com').value=DEFAULTS.com; $('p_fix').value=DEFAULTS.fix; $('p_base').value=DEFAULTS.base;
+    $('p_km').value=DEFAULTS.km; $('p_vmin').value=DEFAULTS.vmin; $('p_vnota').value=DEFAULTS.vnota;
+    $('p_pmin').value=DEFAULTS.pmin; $('p_pnota').value=DEFAULTS.pnota; $('p_pcomp').value=DEFAULTS.pcomp;
+    readParams(); render();
+  });
+}
+
+fillSelects();
+bind();
+readParams();
+render();
+</script>
+</body>
+</html>
