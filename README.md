@@ -4,7 +4,7 @@ Aplicação web para organizar estudos e tarefas do dia a dia: cadastro de taref
 prioridade e prazo, destaque para atrasadas, lista das próximas em ordem de prazo,
 anel de progresso do dia e acompanhamento de avanço por matéria/projeto.
 
-🔗 **Demo ao vivo:** https://eduardoeug.github.io/workana/
+🔗 **Demo ao vivo:** https://eduardoeug.github.io/workana/norte/
 
 ## Funcionalidades
 
