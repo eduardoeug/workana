@@ -13,6 +13,7 @@ independente, com sua própria demo publicada via **GitHub Pages**.
 | [**Bolso**](financas/) | App mobile de finanças pessoais — saldo, gastos por categoria, drill-in nas transações e metas com alerta. | [Abrir demo →](https://eduardoeug.github.io/workana/financas/) |
 | [**Lumo**](loja/) | Loja virtual em React — vitrine responsiva, filtro por categoria e carrinho funcional (alternativa de site próprio ao Wix). | [Abrir demo →](https://eduardoeug.github.io/workana/loja/) |
 | [**Marca**](agenda/) | Plataforma de agendamento online em React — fluxo do cliente (serviço → profissional → data → horário) e painel do profissional (agenda, ocupação, faturamento). | [Abrir demo →](https://eduardoeug.github.io/workana/agenda/) |
+| [**Conecta**](conecta/) | Landing + site institucional de um app de intermediação de freelancers/entregadores — seletor Profissional/Empresa, mockup do app, download, e painel institucional pra empresas (supermercados, shoppings, distribuidores). | [Abrir demo →](https://eduardoeug.github.io/workana/conecta/) |
 
 > Novos projetos serão adicionados aqui, cada um em sua própria pasta.
 
@@ -40,7 +41,10 @@ workana/
 ├── loja/             ← demo: loja virtual em React (Lumo)
 │   ├── README.md
 │   └── index.html
-└── agenda/           ← demo: plataforma de agendamento online (Marca)
+├── agenda/           ← demo: plataforma de agendamento online (Marca)
+│   ├── README.md
+│   └── index.html
+└── conecta/          ← demo: landing + site institucional de app de intermediação (Conecta)
     ├── README.md
     └── index.html
 ```
