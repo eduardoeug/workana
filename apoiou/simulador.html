@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apoiou — Simulador Mobile</title>
+<meta name="description" content="Visualize o site Apoiou como ele aparece em um celular." />
+<link rel="icon" type="image/png" href="./assets/logo-mark.png" />
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+    background:radial-gradient(900px 500px at 75% -10%,rgba(84,190,197,.22),transparent 60%),linear-gradient(180deg,#192c4c,#101f38);
+    font-family:'Libre Franklin',system-ui,sans-serif;padding:28px 16px;
+  }
+  .bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+  .bar img{height:34px}
+  .bar a{
+    color:#fff;text-decoration:none;font-weight:600;font-size:.9rem;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);
+    padding:9px 18px;border-radius:11px;transition:.2s;
+  }
+  .bar a:hover{background:rgba(255,255,255,.22)}
+  .stage{transform-origin:top center}
+  .frame{
+    width:401px;height:864px;background:#101f38;border-radius:54px;padding:13px;position:relative;
+    box-shadow:0 40px 90px rgba(0,0,0,.55),inset 0 0 0 2px #2a4470;
+  }
+  .frame::before{ /* notch */
+    content:"";position:absolute;top:13px;left:50%;transform:translateX(-50%);
+    width:120px;height:28px;background:#101f38;border-radius:0 0 18px 18px;z-index:3;
+  }
+  .frame::after{ /* botão lateral */
+    content:"";position:absolute;right:-3px;top:190px;width:3px;height:72px;background:#2a4470;border-radius:0 3px 3px 0;
+  }
+  .screen{width:375px;height:838px;border:0;border-radius:42px;background:#fff;display:block}
+  .hint{color:#8fa3c8;font-size:.82rem;text-align:center;max-width:44ch}
+  @media(max-height:1000px){.stage{transform:scale(.82)}body{gap:6px}}
+  @media(max-height:820px){.stage{transform:scale(.68)}}
+  @media(max-width:430px){.stage{transform:scale(.8)}}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <img src="./assets/logo-horizontal-white.png" alt="Apoiou" />
+    <a href="./">Abrir versão desktop ↗</a>
+  </div>
+  <div class="stage">
+    <div class="frame">
+      <iframe class="screen" src="./" title="Apoiou em tela de celular"></iframe>
+    </div>
+  </div>
+  <p class="hint">Pré-visualização do site em tela de celular (375 × 812). Navegue normalmente dentro do aparelho.</p>
+</body>
+</html>
