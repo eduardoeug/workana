@@ -1,0 +1,15 @@
+# Apoiou — URLs amigáveis
+RewriteEngine On
+RewriteRule ^admin/?$ admin.html [L]
+RewriteRule ^simulador/?$ simulador.html [L]
+
+# Cache: HTML/JSON sempre revalidados (o conteúdo muda pelo admin);
+# assets com hash no nome podem cachear por muito tempo
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|json)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(js|css|png|jpe?g|webp|svg|woff2?)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
