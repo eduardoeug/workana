@@ -394,11 +394,11 @@
 
     // ---- cotas
     s.push('<line x1="'+x0+'" y1="'+(baseY+34)+'" x2="'+x1+'" y2="'+(baseY+34)+'" stroke="#8a99b3" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>');
-    s.push('<text x="'+cx+'" y="'+(baseY+29)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#61708a">'+fmt(st.L)+'</text>');
+    s.push('<text x="'+cx+'" y="'+(baseY+29)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#61708a" stroke="#fff" stroke-width="3.5" paint-order="stroke">'+fmt(st.L)+'</text>');
     s.push('<line x1="'+(x0-30)+'" y1="'+topY+'" x2="'+(x0-30)+'" y2="'+baseY+'" stroke="#8a99b3" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>');
-    s.push('<text x="'+(x0-36)+'" y="'+((topY+baseY)/2)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#61708a" transform="rotate(-90 '+(x0-36)+' '+((topY+baseY)/2)+')">'+fmt(st.A)+'</text>');
+    s.push('<text x="'+(x0-36)+'" y="'+((topY+baseY)/2)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#61708a" stroke="#fff" stroke-width="3.5" paint-order="stroke" transform="rotate(-90 '+(x0-36)+' '+((topY+baseY)/2)+')">'+fmt(st.A)+'</text>');
     s.push('<line x1="'+(x1+10)+'" y1="'+(topY-6)+'" x2="'+(x1+dp+4)+'" y2="'+(topY-dp*0.42-6)+'" stroke="#8a99b3" stroke-width="1.5" stroke-dasharray="4 3"/>');
-    s.push('<text x="'+(x1+dp/2+22)+'" y="'+(topY-dp*0.30-12)+'" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" fill="#61708a">'+fmt(st.P)+'</text>');
+    s.push('<text x="'+(x1+dp/2+22)+'" y="'+(topY-dp*0.30-12)+'" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" fill="#61708a" stroke="#fff" stroke-width="3.5" paint-order="stroke">'+fmt(st.P)+'</text>');
 
     el('bench').innerHTML =
       '<defs><marker id="a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M1,4 L7,1.5 L7,6.5 Z" fill="#8a99b3"/></marker>'+
