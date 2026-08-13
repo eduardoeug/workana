@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bancadas Modulares — Monte a sua | Catálogo interativo</title>
+<meta name="description" content="Catálogo interativo de bancadas de trabalho modulares: escolha altura, profundidade, comprimento, cor e acessórios e peça pelo WhatsApp." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --blue:#1b4a9c; --blue-d:#123670; --blue-l:#e8f0ff;
+    --orange:#f26a1b; --orange-d:#d4550c;
+    --ink:#16202e; --muted:#61708a; --line:#e3e9f2; --bg:#f6f8fc; --white:#fff;
+    --wa:#25d366; --wa-d:#1da851;
+    --radius:14px; --shadow:0 10px 30px rgba(20,40,80,.10); --shadow-sm:0 2px 8px rgba(20,40,80,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.cond{font-family:'Barlow Condensed','Inter',sans-serif;letter-spacing:.01em;text-transform:uppercase}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+  .demo-bar{background:var(--blue-d);color:#cfe0ff;font-size:.8rem;text-align:center;padding:7px 14px}
+  .demo-bar b{color:#fff}
+
+  header{background:var(--white);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:50;box-shadow:var(--shadow-sm)}
+  .nav{display:flex;align-items:center;gap:14px;height:64px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-mark{width:38px;height:38px;border-radius:8px;background:var(--blue);position:relative;flex:none;overflow:hidden}
+  .logo-mark::before{content:"";position:absolute;left:0;right:0;top:11px;height:5px;background:var(--orange)}
+  .logo-mark::after{content:"";position:absolute;left:0;right:0;bottom:11px;height:5px;background:var(--orange)}
+  .logo b{font-family:'Barlow Condensed';font-size:1.45rem;line-height:1;color:var(--blue);display:block}
+  .logo span{font-size:.68rem;color:var(--muted);letter-spacing:.16em;text-transform:uppercase}
+  .nav-cta{margin-left:auto}
+
+  .hero{padding:26px 0 10px}
+  .hero h1{font-size:clamp(1.6rem,4vw,2.3rem);color:var(--blue)}
+  .hero p{color:var(--muted);max-width:60ch;margin-top:6px}
+
+  .layout{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;padding:18px 0 40px;align-items:start}
+
+  /* ---------- preview ---------- */
+  .preview{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);position:sticky;top:82px;overflow:hidden}
+  .preview-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fbfcff,#f3f6fc)}
+  .preview-head b{font-family:'Barlow Condensed';font-size:1.15rem;color:var(--blue)}
+  .badge{background:var(--blue-l);color:var(--blue);font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px}
+  .stage{padding:10px 8px 4px;background:
+     radial-gradient(700px 200px at 50% 92%, #e9eef7, transparent 70%);}
+  svg#bench{width:100%;height:auto;display:block}
+  .dims{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px 16px;border-top:1px solid var(--line);background:#fbfcfe}
+  .dim{background:var(--white);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:.82rem;box-shadow:var(--shadow-sm)}
+  .dim b{color:var(--blue)}
+
+  /* ---------- config ---------- */
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px;margin-bottom:16px}
+  .panel h2{font-size:1.12rem;color:var(--blue);margin-bottom:3px}
+  .panel .hint{font-size:.85rem;color:var(--muted);margin-bottom:13px}
+  .step{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:6px;background:var(--orange);color:#fff;font-weight:700;font-size:.8rem;margin-right:8px;font-family:'Inter'}
+
+  .opts{display:flex;gap:9px;flex-wrap:wrap}
+  .opt{border:1.5px solid var(--line);background:var(--white);border-radius:10px;padding:10px 14px;cursor:pointer;font-family:'Inter';font-size:.92rem;font-weight:600;color:var(--ink);transition:.16s;min-width:74px;text-align:center}
+  .opt small{display:block;font-weight:500;font-size:.72rem;color:var(--muted)}
+  .opt:hover{border-color:#b9cdf0;transform:translateY(-1px)}
+  .opt.sel{border-color:var(--blue);background:var(--blue-l);color:var(--blue);box-shadow:0 0 0 3px rgba(27,74,156,.10)}
+  .opt.sel small{color:var(--blue)}
+
+  .colors{display:flex;gap:11px;flex-wrap:wrap}
+  .color{border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:9px;transition:.16s;font-size:.9rem;font-weight:600}
+  .color:hover{border-color:#b9cdf0}
+  .color.sel{border-color:var(--blue);background:var(--blue-l);box-shadow:0 0 0 3px rgba(27,74,156,.10)}
+  .swatch{width:26px;height:26px;border-radius:6px;overflow:hidden;display:flex;flex-direction:column;flex:none;border:1px solid rgba(0,0,0,.08)}
+  .swatch i{display:block;height:50%}
+
+  .acc{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .accitem{border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:.16s;font-size:.9rem}
+  .accitem:hover{border-color:#b9cdf0}
+  .accitem.sel{border-color:var(--orange);background:#fff4ec;box-shadow:0 0 0 3px rgba(242,106,27,.10)}
+  .check{width:20px;height:20px;border-radius:5px;border:1.7px solid #c7d3e6;flex:none;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:#fff;transition:.16s}
+  .accitem.sel .check{background:var(--orange);border-color:var(--orange)}
+  .accitem b{display:block;font-weight:600;line-height:1.2}
+  .accitem small{color:var(--muted);font-size:.75rem}
+
+  /* ---------- summary ---------- */
+  .summary{background:linear-gradient(160deg,#12305f,#1b4a9c);color:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .summary h2{color:#fff;font-size:1.15rem;margin-bottom:12px}
+  .srow{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.18);font-size:.92rem}
+  .srow span{color:#bed2f2}
+  .srow b{text-align:right}
+  .srow:last-of-type{border-bottom:0}
+  .code{margin-top:12px;background:rgba(255,255,255,.10);border:1px dashed rgba(255,255,255,.3);border-radius:9px;padding:9px 12px;font-size:.86rem}
+  .code span{color:#bed2f2;font-size:.76rem;display:block}
+  .code b{font-family:'Barlow Condensed';font-size:1.2rem;letter-spacing:.06em}
+  .wa-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin-top:14px;background:var(--wa);color:#fff;border:0;border-radius:11px;padding:15px;font-family:'Inter';font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none;transition:.18s;box-shadow:0 8px 20px rgba(37,211,102,.32)}
+  .wa-btn:hover{background:var(--wa-d);transform:translateY(-2px)}
+  .wa-note{text-align:center;font-size:.78rem;color:#bed2f2;margin-top:9px}
+
+  /* preset models */
+  .models{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .model{border:1.5px solid var(--line);border-radius:10px;padding:11px;cursor:pointer;text-align:center;transition:.16s;background:var(--white)}
+  .model:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+  .model b{display:block;font-size:.9rem;color:var(--blue)}
+  .model small{color:var(--muted);font-size:.75rem}
+
+  footer{background:#0e2445;color:#93aad2;padding:26px 0;font-size:.85rem;text-align:center}
+
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr}
+    .preview{position:static;order:-1}
+    .acc{grid-template-columns:1fr}
+    .models{grid-template-columns:1fr}
+    .nav-cta{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-bar">🔧 <b>Demonstração interativa</b> — medidas, cores e acessórios são exemplos e serão ajustados conforme a sua tabela real de produtos.</div>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">
+      <div class="logo-mark"></div>
+      <div><b>Bancadas</b><span>Estruturas modulares</span></div>
+    </div>
+    <a class="wa-btn nav-cta" style="width:auto;margin:0;padding:10px 18px;font-size:.9rem;box-shadow:none" href="#pedido">Pedir pelo WhatsApp</a>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <h1>Monte a sua bancada</h1>
+  <p>Produto <b>modular</b>: escolha a altura, a profundidade, o comprimento, a cor e os acessórios. A bancada é desenhada na hora, do jeito que você precisa — e o pedido vai pro WhatsApp já com tudo especificado.</p>
+</div>
+
+<div class="wrap layout">
+
+  <!-- ============ PREVIEW ============ -->
+  <div class="preview">
+    <div class="preview-head">
+      <b>Sua bancada</b>
+      <span class="badge" id="badge">Bancada modular</span>
+    </div>
+    <div class="stage">
+      <svg id="bench" viewBox="0 0 640 460" xmlns="http://www.w3.org/2000/svg" aria-label="Prévia da bancada"></svg>
+    </div>
+    <div class="dims">
+      <div class="dim">Comprimento <b id="dL">2,00 m</b></div>
+      <div class="dim">Altura <b id="dA">0,90 m</b></div>
+      <div class="dim">Profundidade <b id="dP">0,70 m</b></div>
+      <div class="dim">Cor <b id="dC">Azul / Laranja</b></div>
+    </div>
+  </div>
+
+  <!-- ============ CONFIG ============ -->
+  <div>
+    <div class="panel">
+      <h2><span class="step">1</span>Comprimento</h2>
+      <div class="hint">8 medidas disponíveis — escolha o que cabe no seu espaço.</div>
+      <div class="opts" id="optL"></div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="step">2</span>Altura</h2>
+      <div class="hint">3 medidas — bancada de trabalho sentado, em pé ou alta.</div>
+      <div class="opts" id="optA"></div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="step">3</span>Profundidade</h2>
+      <div class="hint">3 medidas — quanto de área de trabalho você precisa.</div>
+      <div class="opts" id="optP"></div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="step">4</span>Cor</h2>
+      <div class="hint">3 padrões de pintura da estrutura.</div>
+      <div class="colors" id="optC"></div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="step">5</span>Acessórios</h2>
+      <div class="hint">5 opcionais — pode escolher mais de um.</div>
+      <div class="acc" id="optAcc"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Modelos prontos</h2>
+      <div class="hint">Configurações que mais saem — clique pra carregar.</div>
+      <div class="models" id="presets"></div>
+    </div>
+
+    <div class="summary" id="pedido">
+      <h2>Resumo do pedido</h2>
+      <div class="srow"><span>Comprimento</span><b id="sL">—</b></div>
+      <div class="srow"><span>Altura</span><b id="sA">—</b></div>
+      <div class="srow"><span>Profundidade</span><b id="sP">—</b></div>
+      <div class="srow"><span>Cor</span><b id="sC">—</b></div>
+      <div class="srow"><span>Acessórios</span><b id="sAcc">Nenhum</b></div>
+      <div class="code"><span>Código da configuração</span><b id="sCode">BM-200-090-070-AL</b></div>
+      <a class="wa-btn" id="waBtn" href="#" target="_blank" rel="noopener">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.4.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2m0 18.2c-1.6 0-3.2-.5-4.6-1.3l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1 1 7.4 4"/></svg>
+        Pedir pelo WhatsApp
+      </a>
+      <div class="wa-note">A mensagem abre já preenchida com a sua configuração</div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 — Demonstração de catálogo interativo · HTML, CSS e JavaScript · funciona no celular</footer>
+
+<script>
+  // ---------- dados (exemplo — ajustáveis à tabela real do cliente) ----------
+  var COMPRIMENTOS = [1.00,1.20,1.50,1.80,2.00,2.20,2.50,3.00];
+  var ALTURAS = [
+    {v:0.80, n:'0,80 m', d:'sentado'},
+    {v:0.90, n:'0,90 m', d:'em pé'},
+    {v:1.00, n:'1,00 m', d:'alta'}
+  ];
+  var PROFUND = [
+    {v:0.60, n:'0,60 m', d:'compacta'},
+    {v:0.70, n:'0,70 m', d:'padrão'},
+    {v:0.80, n:'0,80 m', d:'ampla'}
+  ];
+  var CORES = [
+    {id:'AL', n:'Azul / Laranja', col:'#1b4a9c', beam:'#f26a1b'},
+    {id:'CA', n:'Cinza / Azul',   col:'#5b6675', beam:'#1b6fd0'},
+    {id:'VP', n:'Verde / Preto',  col:'#1f6b4a', beam:'#2b3340'}
+  ];
+  var ACESSORIOS = [
+    {id:'PS', n:'Prateleira superior', d:'ganha altura de armazenagem'},
+    {id:'PF', n:'Painel porta-ferramentas', d:'ferramentas sempre à mão'},
+    {id:'GV', n:'Gaveteiro', d:'organiza peças pequenas'},
+    {id:'IL', n:'Iluminação LED', d:'luz direta na área de trabalho'},
+    {id:'RD', n:'Rodízios com trava', d:'move a bancada quando precisa'}
+  ];
+  var PRESETS = [
+    {n:'Compacta', d:'1,20 × 0,80 × 0,60', L:1.20,A:0.80,P:0.60,C:'AL',acc:['PS']},
+    {n:'Padrão',   d:'2,00 × 0,90 × 0,70', L:2.00,A:0.90,P:0.70,C:'AL',acc:['PS','PF']},
+    {n:'Industrial',d:'3,00 × 1,00 × 0,80', L:3.00,A:1.00,P:0.80,C:'CA',acc:['PS','PF','IL','GV']}
+  ];
+
+  var st = {L:2.00, A:0.90, P:0.70, C:'AL', acc:['PS']};
+
+  var fmt = function(v){ return v.toFixed(2).replace('.',',')+' m'; };
+  var el = function(id){ return document.getElementById(id); };
+
+  // ---------- render das opções ----------
+  function renderOpts(){
+    el('optL').innerHTML = COMPRIMENTOS.map(function(v){
+      return '<div class="opt'+(st.L===v?' sel':'')+'" data-k="L" data-v="'+v+'">'+fmt(v)+'</div>';
+    }).join('');
+    el('optA').innerHTML = ALTURAS.map(function(o){
+      return '<div class="opt'+(st.A===o.v?' sel':'')+'" data-k="A" data-v="'+o.v+'">'+o.n+'<small>'+o.d+'</small></div>';
+    }).join('');
+    el('optP').innerHTML = PROFUND.map(function(o){
+      return '<div class="opt'+(st.P===o.v?' sel':'')+'" data-k="P" data-v="'+o.v+'">'+o.n+'<small>'+o.d+'</small></div>';
+    }).join('');
+    el('optC').innerHTML = CORES.map(function(c){
+      return '<div class="color'+(st.C===c.id?' sel':'')+'" data-k="C" data-v="'+c.id+'">'+
+        '<span class="swatch"><i style="background:'+c.col+'"></i><i style="background:'+c.beam+'"></i></span>'+c.n+'</div>';
+    }).join('');
+    el('optAcc').innerHTML = ACESSORIOS.map(function(a){
+      var on = st.acc.indexOf(a.id)>-1;
+      return '<div class="accitem'+(on?' sel':'')+'" data-acc="'+a.id+'"><span class="check">✓</span><span><b>'+a.n+'</b><small>'+a.d+'</small></span></div>';
+    }).join('');
+    el('presets').innerHTML = PRESETS.map(function(p,i){
+      return '<div class="model" data-preset="'+i+'"><b>'+p.n+'</b><small>'+p.d+' m</small></div>';
+    }).join('');
+    bind();
+  }
+
+  function bind(){
+    [].forEach.call(document.querySelectorAll('[data-k]'), function(n){
+      n.onclick = function(){
+        var k=n.getAttribute('data-k'), v=n.getAttribute('data-v');
+        st[k] = (k==='C') ? v : parseFloat(v);
+        renderAll();
+      };
+    });
+    [].forEach.call(document.querySelectorAll('[data-acc]'), function(n){
+      n.onclick = function(){
+        var id=n.getAttribute('data-acc'), i=st.acc.indexOf(id);
+        if(i>-1) st.acc.splice(i,1); else st.acc.push(id);
+        renderAll();
+      };
+    });
+    [].forEach.call(document.querySelectorAll('[data-preset]'), function(n){
+      n.onclick = function(){
+        var p=PRESETS[+n.getAttribute('data-preset')];
+        st={L:p.L,A:p.A,P:p.P,C:p.C,acc:p.acc.slice()};
+        renderAll();
+        document.querySelector('.preview').scrollIntoView({behavior:'smooth',block:'center'});
+      };
+    });
+  }
+
+  // ---------- desenho da bancada (SVG) ----------
+  function drawBench(){
+    var cor = CORES.filter(function(c){return c.id===st.C;})[0];
+    var has = function(id){ return st.acc.indexOf(id)>-1; };
+
+    // escalas
+    var W = 640, H = 460;
+    var bw = 190 + (st.L-1.00)*115;          // largura desenhada conforme comprimento
+    var bh = 150 + (st.A-0.80)*170;          // altura conforme altura
+    var dp = 34 + (st.P-0.60)*95;            // profundidade (perspectiva)
+    var upper = has('PS') ? 92 : 0;          // prateleira superior
+    var cx = W/2, baseY = H - 58 - (has('RD') ? 16 : 0);
+    var x0 = cx - bw/2, x1 = cx + bw/2, topY = baseY - bh;
+
+    var col = cor.col, beam = cor.beam, colD = shade(col,-18), beamD = shade(beam,-15);
+    var s = [];
+
+    // sombra no chão
+    s.push('<ellipse cx="'+cx+'" cy="'+(baseY+16)+'" rx="'+(bw/2+dp*0.5)+'" ry="14" fill="#0e2445" opacity=".10"/>');
+
+    // ---- estrutura traseira (deslocada pela profundidade)
+    var bx0=x0+dp, bx1=x1+dp, bBase=baseY-dp*0.42, bTop=topY-dp*0.42, bUp=bTop-upper;
+    // colunas traseiras
+    s.push(post(bx0-7, bUp-8, 14, (bBase-bUp+8), colD));
+    s.push(post(bx1-7, bUp-8, 14, (bBase-bUp+8), colD));
+
+    // ---- prateleira inferior (sempre)
+    var lowY = baseY - bh*0.22;
+    s.push(shelf(x0,lowY,bw,dp,beam,beamD,'#eef1f6'));
+
+    // ---- gaveteiro (acessório)
+    if(has('GV')){
+      var gw = Math.min(150, bw*0.38), gx = x1-gw-12, gy = topY+16, gh = (lowY-gy)-14;
+      s.push('<g><rect x="'+gx+'" y="'+gy+'" width="'+gw+'" height="'+gh+'" rx="4" fill="#f2f5fa" stroke="'+colD+'" stroke-width="2"/>');
+      for(var g=0; g<3; g++){
+        var yy = gy + 8 + g*(gh-10)/3;
+        s.push('<rect x="'+(gx+7)+'" y="'+yy+'" width="'+(gw-14)+'" height="'+((gh-16)/3-4)+'" rx="3" fill="#fff" stroke="#d7dfec"/>');
+        s.push('<rect x="'+(gx+gw/2-14)+'" y="'+(yy+((gh-16)/3-4)/2-2)+'" width="28" height="4" rx="2" fill="'+beam+'"/>');
+      }
+      s.push('</g>');
+    }
+
+    // ---- tampo (superfície de trabalho)
+    s.push(shelf(x0,topY,bw,dp,beam,beamD,'#f7f9fc'));
+
+    // ---- painel porta-ferramentas (acessório)
+    if(has('PF')){
+      var pH = upper ? upper-26 : 74;
+      var pY = topY - pH - 6;
+      s.push('<rect x="'+(x0+10)+'" y="'+pY+'" width="'+(bw-20)+'" height="'+pH+'" rx="3" fill="#eaf0f9" stroke="'+colD+'" stroke-width="2"/>');
+      for(var r=0;r<Math.max(2,Math.floor(pH/17));r++){
+        for(var c2=0;c2<Math.floor((bw-30)/17);c2++){
+          s.push('<circle cx="'+(x0+22+c2*17)+'" cy="'+(pY+13+r*17)+'" r="2.1" fill="#c3cede"/>');
+        }
+      }
+      // ferramentas penduradas
+      s.push('<rect x="'+(x0+26)+'" y="'+(pY+8)+'" width="7" height="26" rx="2" fill="'+beam+'"/>');
+      s.push('<rect x="'+(x0+46)+'" y="'+(pY+8)+'" width="7" height="20" rx="2" fill="'+col+'"/>');
+      s.push('<rect x="'+(x0+64)+'" y="'+(pY+8)+'" width="7" height="30" rx="2" fill="'+beam+'"/>');
+    }
+
+    // ---- prateleira superior (acessório)
+    if(upper){
+      var upY = topY - upper;
+      s.push(shelf(x0,upY,bw,dp,beam,beamD,'#eef1f6'));
+      // caixas em cima
+      s.push('<rect x="'+(x0+dp*0.35+14)+'" y="'+(upY-26)+'" width="46" height="26" rx="3" fill="#dfe6f1" stroke="#c7d3e6"/>');
+      s.push('<rect x="'+(x0+dp*0.35+66)+'" y="'+(upY-20)+'" width="38" height="20" rx="3" fill="#e9eef7" stroke="#c7d3e6"/>');
+    }
+
+    // ---- iluminação LED (acessório)
+    if(has('IL')){
+      var lY = upper ? (topY-upper+8) : (topY-64);
+      s.push('<rect x="'+(x0+22)+'" y="'+lY+'" width="'+(bw-44)+'" height="7" rx="3.5" fill="#ffd66b" stroke="#e9b93c"/>');
+      s.push('<path d="M '+(x0+30)+' '+(lY+8)+' L '+(x0+16)+' '+(topY-4)+' L '+(x1-16)+' '+(topY-4)+' L '+(x1-30)+' '+(lY+8)+' Z" fill="#ffe9a8" opacity=".38"/>');
+    }
+
+    // ---- colunas frontais
+    var frontTop = upper ? (topY-upper-10) : (topY-10);
+    s.push(post(x0-8, frontTop, 16, baseY-frontTop, col));
+    s.push(post(x1-8, frontTop, 16, baseY-frontTop, col));
+    // travessas diagonais (rigidez)
+    s.push('<line x1="'+(x0+8)+'" y1="'+(baseY-6)+'" x2="'+(x0+dp-6)+'" y2="'+(baseY-dp*0.42-6)+'" stroke="'+colD+'" stroke-width="5" stroke-linecap="round"/>');
+    s.push('<line x1="'+(x1-8)+'" y1="'+(baseY-6)+'" x2="'+(x1+dp-6)+'" y2="'+(baseY-dp*0.42-6)+'" stroke="'+colD+'" stroke-width="5" stroke-linecap="round"/>');
+
+    // ---- pés ou rodízios
+    if(has('RD')){
+      [x0,x1].forEach(function(xx){
+        s.push('<circle cx="'+xx+'" cy="'+(baseY+10)+'" r="11" fill="#2b3340"/><circle cx="'+xx+'" cy="'+(baseY+10)+'" r="4.5" fill="#9aa6b8"/>');
+        s.push('<circle cx="'+(xx+dp)+'" cy="'+(baseY-dp*0.42+10)+'" r="9" fill="#3a4353"/>');
+      });
+    } else {
+      [x0,x1].forEach(function(xx){
+        s.push('<rect x="'+(xx-12)+'" y="'+baseY+'" width="24" height="7" rx="2" fill="'+shade(col,-30)+'"/>');
+        s.push('<rect x="'+(xx+dp-9)+'" y="'+(baseY-dp*0.42)+'" width="18" height="6" rx="2" fill="'+shade(col,-38)+'"/>');
+      });
+    }
+
+    // ---- cotas
+    s.push('<line x1="'+x0+'" y1="'+(baseY+34)+'" x2="'+x1+'" y2="'+(baseY+34)+'" stroke="#8a99b3" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>');
+    s.push('<text x="'+cx+'" y="'+(baseY+29)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#61708a">'+fmt(st.L)+'</text>');
+    s.push('<line x1="'+(x0-30)+'" y1="'+topY+'" x2="'+(x0-30)+'" y2="'+baseY+'" stroke="#8a99b3" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>');
+    s.push('<text x="'+(x0-36)+'" y="'+((topY+baseY)/2)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#61708a" transform="rotate(-90 '+(x0-36)+' '+((topY+baseY)/2)+')">'+fmt(st.A)+'</text>');
+    s.push('<line x1="'+(x1+10)+'" y1="'+(topY-6)+'" x2="'+(x1+dp+4)+'" y2="'+(topY-dp*0.42-6)+'" stroke="#8a99b3" stroke-width="1.5" stroke-dasharray="4 3"/>');
+    s.push('<text x="'+(x1+dp/2+22)+'" y="'+(topY-dp*0.30-12)+'" font-family="Inter,sans-serif" font-size="12.5" font-weight="600" fill="#61708a">'+fmt(st.P)+'</text>');
+
+    el('bench').innerHTML =
+      '<defs><marker id="a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M1,4 L7,1.5 L7,6.5 Z" fill="#8a99b3"/></marker>'+
+      '<linearGradient id="gtop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e8edf6"/></linearGradient></defs>'+ s.join('');
+  }
+
+  // prateleira em 2.5D: topo (paralelogramo) + viga frontal
+  function shelf(x,y,w,dp,beam,beamD,face){
+    var t = 9;
+    return '<g>'+
+      '<path d="M '+x+' '+y+' L '+(x+dp)+' '+(y-dp*0.42)+' L '+(x+w+dp)+' '+(y-dp*0.42)+' L '+(x+w)+' '+y+' Z" fill="url(#gtop)" stroke="#cfd9e8" stroke-width="1.2"/>'+
+      '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+t+'" fill="'+beam+'"/>'+
+      '<rect x="'+x+'" y="'+(y+t)+'" width="'+w+'" height="3" fill="'+beamD+'"/>'+
+      '<path d="M '+(x+w)+' '+y+' L '+(x+w+dp)+' '+(y-dp*0.42)+' L '+(x+w+dp)+' '+(y-dp*0.42+t)+' L '+(x+w)+' '+(y+t)+' Z" fill="'+beamD+'"/>'+
+      '</g>';
+  }
+  function post(x,y,w,h,c){
+    return '<g><rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="2" fill="'+c+'"/>'+
+      '<rect x="'+x+'" y="'+y+'" width="'+(w*0.34)+'" height="'+h+'" rx="2" fill="#fff" opacity=".16"/></g>';
+  }
+  function shade(hex,p){
+    var n=parseInt(hex.slice(1),16), r=(n>>16)+p, g=((n>>8)&255)+p, b=(n&255)+p;
+    var cl=function(v){return Math.max(0,Math.min(255,v));};
+    return '#'+((1<<24)+(cl(r)<<16)+(cl(g)<<8)+cl(b)).toString(16).slice(1);
+  }
+
+  // ---------- resumo + WhatsApp ----------
+  function renderSummary(){
+    var cor = CORES.filter(function(c){return c.id===st.C;})[0];
+    var accN = st.acc.map(function(id){ return ACESSORIOS.filter(function(a){return a.id===id;})[0].n; });
+    var alt = ALTURAS.filter(function(a){return a.v===st.A;})[0];
+    var prof = PROFUND.filter(function(p){return p.v===st.P;})[0];
+
+    el('sL').textContent = fmt(st.L);
+    el('sA').textContent = alt.n+' ('+alt.d+')';
+    el('sP').textContent = prof.n;
+    el('sC').textContent = cor.n;
+    el('sAcc').textContent = accN.length ? accN.join(', ') : 'Nenhum';
+    el('dL').textContent = fmt(st.L);
+    el('dA').textContent = alt.n;
+    el('dP').textContent = prof.n;
+    el('dC').textContent = cor.n;
+
+    var pad = function(v){ return String(Math.round(v*100)).padStart(3,'0'); };
+    var code = 'BM-'+pad(st.L)+'-'+pad(st.A)+'-'+pad(st.P)+'-'+st.C+(st.acc.length?'-'+st.acc.slice().sort().join(''):'');
+    el('sCode').textContent = code;
+    el('badge').textContent = fmt(st.L)+' × '+alt.n;
+
+    var msg = 'Ola! Tenho interesse na bancada modular:\n'+
+      '• Comprimento: '+fmt(st.L)+'\n'+
+      '• Altura: '+alt.n+'\n'+
+      '• Profundidade: '+prof.n+'\n'+
+      '• Cor: '+cor.n+'\n'+
+      '• Acessorios: '+(accN.length?accN.join(', '):'nenhum')+'\n'+
+      '• Codigo: '+code+'\n\n'+
+      'Pode me passar o preco e o prazo?';
+    el('waBtn').setAttribute('href','https://wa.me/5500000000000?text='+encodeURIComponent(msg));
+  }
+
+  function renderAll(){ renderOpts(); drawBench(); renderSummary(); }
+  renderAll();
+</script>
+</body>
+</html>
