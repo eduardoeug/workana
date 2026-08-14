@@ -70,10 +70,11 @@
 
   /* tabs */
   .tabs{display:flex;border-top:1px solid var(--line);background:var(--white)}
-  .tab{flex:1;border:0;background:none;padding:9px 2px 11px;cursor:pointer;font-family:'Inter';font-size:.66rem;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;transition:.15s}
-  .tab i{font-style:normal;font-size:1.05rem;line-height:1}
-  .tab.on{color:var(--accent)}
-  .tab.on i{transform:translateY(-1px)}
+  .tab{flex:1;border:0;background:none;padding:10px 2px 11px;cursor:pointer;font-family:'Inter';font-size:.66rem;font-weight:600;color:#a29684;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.15s;position:relative}
+  .tab svg{width:19px;height:19px;display:block}
+  .tab:hover{color:#7d7568}
+  .tab.on{color:var(--ink)}
+  .tab.on::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2px;background:var(--accent);border-radius:0 0 3px 3px}
 
   /* habit tracker */
   .habit{margin:4px 6px 10px}
@@ -125,7 +126,7 @@
 </head>
 <body>
 
-<div class="note">📓 <b>Demo navegável</b> — protótipo de interface. Pode tocar, marcar, migrar e criar itens de verdade.</div>
+<div class="note"><b>Demo navegável</b> — protótipo de interface. Pode tocar, marcar, migrar e criar itens de verdade.</div>
 
 <header>
   <span class="badge">Método Bullet Journal</span>
@@ -159,11 +160,16 @@
         </div>
 
         <div class="tabs">
-          <button class="tab on" data-view="dia"><i>📓</i>Diário</button>
-          <button class="tab" data-view="mes"><i>🗓️</i>Mensal</button>
-          <button class="tab" data-view="futuro"><i>🔭</i>Futuro</button>
-          <button class="tab" data-view="colecoes"><i>📚</i>Coleções</button>
-          <button class="tab" data-view="habitos"><i>✅</i>Hábitos</button>
+          <button class="tab on" data-view="dia" aria-label="Log diário">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v18H6.5A1.5 1.5 0 0 1 5 19.5z"/><path d="M9 3v18"/><path d="M12.5 8.5h4M12.5 12.5h4"/></svg>Diário</button>
+          <button class="tab" data-view="mes" aria-label="Log mensal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Mensal</button>
+          <button class="tab" data-view="futuro" aria-label="Log futuro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>Futuro</button>
+          <button class="tab" data-view="colecoes" aria-label="Coleções">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 7.5l9 4.5 9-4.5z"/><path d="M3 12.5 12 17l9-4.5"/></svg>Coleções</button>
+          <button class="tab" data-view="habitos" aria-label="Hábitos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5 5.7 9.2 9 6"/><path d="M4 16.5 5.7 18.2 9 15"/><path d="M12.5 8h7.5M12.5 17h7.5"/></svg>Hábitos</button>
         </div>
       </div>
     </div>
