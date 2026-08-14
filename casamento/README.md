@@ -1,6 +1,8 @@
 # Ana & Rafael — site de casamento + painel dos noivos + app (demo)
 
-Demonstração de um **mini destination wedding** tratado como produto, não como página solta:
+Demonstração de uma **plataforma multi-casamento**: vários casais, cada um com seu site de
+mini destination wedding, seu painel e seus convidados — mais o mesmo código virando
+**aplicativo mobile com Capacitor**.
 o site dos convidados, o **painel de administração dos noivos** e o mesmo código virando
 **aplicativo mobile com Capacitor**.
 
