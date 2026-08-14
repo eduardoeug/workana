@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rotina — app de Bullet Journal | Demo navegável</title>
+<meta name="description" content="Demo interativo de um app Android de rotina no método Bullet Journal: registro rápido, log diário/mensal/futuro, migração de tarefas, coleções e habit tracker." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#1c1a17; --muted:#7d7568; --line:#e7e1d6; --paper:#faf7f1; --paper-2:#f3ede2;
+    --accent:#c2553d; --accent-2:#8a6f4e; --ok:#3f7d58; --blue:#3a5a8c;
+    --white:#fff; --shadow:0 18px 44px rgba(60,45,25,.16); --shadow-sm:0 2px 10px rgba(60,45,25,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:linear-gradient(160deg,#f6f2ea,#ece4d6);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+  h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+
+  .note{background:#2c2722;color:#e8dfd0;font-size:.82rem;text-align:center;padding:8px 14px}
+  .note b{color:#fff}
+
+  header{padding:26px 0 6px;text-align:center}
+  header h1{font-size:clamp(1.7rem,4vw,2.4rem);color:#2c2722}
+  header p{color:var(--muted);max-width:56ch;margin:8px auto 0}
+
+  .layout{display:grid;grid-template-columns:340px 1fr;gap:34px;align-items:start;padding:24px 0 46px}
+
+  /* ---------- phone ---------- */
+  .phone-wrap{position:sticky;top:22px;display:flex;justify-content:center}
+  .phone{width:330px;background:#241f1a;border-radius:38px;padding:11px;box-shadow:var(--shadow);border:1px solid #3a332b}
+  .screen{background:var(--paper);border-radius:29px;overflow:hidden;height:620px;display:flex;flex-direction:column;position:relative}
+  .sbar{display:flex;justify-content:space-between;align-items:center;padding:9px 18px 4px;font-size:.72rem;color:var(--muted);font-weight:600}
+  .apphead{padding:6px 18px 12px;border-bottom:1px solid var(--line);background:var(--paper)}
+  .apphead .d{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+  .apphead h2{font-size:1.35rem;margin-top:2px;color:#2c2722}
+  .apphead .sub{font-size:.78rem;color:var(--muted)}
+
+  .body{flex:1;overflow-y:auto;padding:12px 16px 8px}
+  .body::-webkit-scrollbar{width:0}
+
+  /* entries */
+  .entry{display:flex;gap:10px;align-items:flex-start;padding:9px 8px;border-radius:10px;cursor:pointer;transition:.15s;position:relative}
+  .entry:hover{background:var(--paper-2)}
+  .sig{font-family:'Fraunces',serif;font-size:1.05rem;width:20px;text-align:center;flex:none;line-height:1.4;color:var(--ink)}
+  .etxt{flex:1;font-size:.93rem;line-height:1.35}
+  .etag{font-size:.68rem;padding:2px 7px;border-radius:999px;background:var(--paper-2);color:var(--muted);font-weight:600;white-space:nowrap;margin-top:2px}
+  .entry.done .etxt{text-decoration:line-through;color:var(--muted)}
+  .entry.done .sig{color:var(--ok)}
+  .entry.migrated .etxt{color:var(--muted)}
+  .entry.migrated .sig{color:var(--accent)}
+  .entry.evento .sig{color:var(--blue)}
+  .entry.nota .sig{color:var(--accent-2)}
+  .hint-tap{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:.64rem;color:#b9ae9c;opacity:0;transition:.15s}
+  .entry:hover .hint-tap{opacity:1}
+
+  .sechead{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:700;margin:14px 6px 4px;display:flex;justify-content:space-between;align-items:center}
+  .sechead span.count{background:var(--paper-2);border-radius:999px;padding:1px 8px;font-size:.68rem}
+
+  /* add bar */
+  .addbar{padding:9px 14px 12px;border-top:1px solid var(--line);background:var(--paper);display:flex;gap:7px;align-items:center}
+  .addbar input{flex:1;border:1px solid var(--line);background:var(--white);border-radius:10px;padding:9px 11px;font-family:'Inter';font-size:.88rem}
+  .addbar input:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(194,85,61,.12)}
+  .sigpick{display:flex;gap:3px}
+  .sigbtn{width:31px;height:33px;border:1px solid var(--line);background:var(--white);border-radius:8px;cursor:pointer;font-family:'Fraunces',serif;font-size:1rem;transition:.15s}
+  .sigbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .addgo{width:36px;height:33px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-size:1.1rem;cursor:pointer;line-height:1}
+
+  /* tabs */
+  .tabs{display:flex;border-top:1px solid var(--line);background:var(--white)}
+  .tab{flex:1;border:0;background:none;padding:9px 2px 11px;cursor:pointer;font-family:'Inter';font-size:.66rem;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;transition:.15s}
+  .tab i{font-style:normal;font-size:1.05rem;line-height:1}
+  .tab.on{color:var(--accent)}
+  .tab.on i{transform:translateY(-1px)}
+
+  /* habit tracker */
+  .habit{margin:4px 6px 10px}
+  .habit-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line)}
+  .habit-row b{flex:1;font-size:.86rem;font-weight:600}
+  .dots{display:flex;gap:4px}
+  .dot{width:15px;height:15px;border-radius:5px;border:1.4px solid var(--line);cursor:pointer;background:var(--white);transition:.14s}
+  .dot.on{background:var(--ok);border-color:var(--ok)}
+  .dot:hover{transform:scale(1.14)}
+
+  .month{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:6px 4px 12px}
+  .mday{aspect-ratio:1;border-radius:7px;background:var(--white);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.7rem;color:var(--muted);position:relative}
+  .mday b{font-size:.76rem;color:var(--ink);font-weight:600}
+  .mday.today{background:var(--ink);border-color:var(--ink)}
+  .mday.today b{color:var(--paper)}
+  .mday .pip{width:4px;height:4px;border-radius:50%;background:var(--accent);position:absolute;bottom:4px}
+
+  .coll{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-bottom:8px;cursor:pointer;transition:.15s}
+  .coll:hover{border-color:var(--accent);transform:translateX(2px)}
+  .coll b{display:block;font-size:.92rem}
+  .coll small{color:var(--muted);font-size:.76rem}
+
+  .empty{text-align:center;color:var(--muted);font-size:.85rem;padding:26px 10px}
+
+  /* ---------- explain side ---------- */
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow-sm);margin-bottom:16px}
+  .card h3{font-size:1.15rem;margin-bottom:6px;color:#2c2722}
+  .card p{color:var(--muted);font-size:.95rem}
+  .card ul{margin:10px 0 0 0;padding:0;list-style:none}
+  .card li{padding:7px 0 7px 26px;position:relative;font-size:.93rem;border-bottom:1px dashed var(--line)}
+  .card li:last-child{border-bottom:0}
+  .card li::before{content:attr(data-s);position:absolute;left:0;top:6px;font-family:'Fraunces',serif;font-size:1rem;color:var(--accent);width:20px;text-align:center}
+  .card li b{font-weight:600}
+  .try{background:linear-gradient(155deg,#2c2722,#443b31);color:#f0e8da;border:0}
+  .try h3{color:#fff}
+  .try p{color:#cdc2b0}
+  .try ol{margin:12px 0 0 18px;color:#e8dfd0;font-size:.93rem}
+  .try li{color:#e8dfd0;border-bottom:1px dashed rgba(255,255,255,.14);padding-left:0}
+  .try li::before{content:''}
+  .badge{display:inline-block;background:var(--paper-2);color:var(--accent-2);font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+
+  footer{text-align:center;color:var(--muted);font-size:.84rem;padding:22px 0 34px}
+
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr;gap:24px}
+    .phone-wrap{position:static}
+  }
+</style>
+</head>
+<body>
+
+<div class="note">📓 <b>Demo navegável</b> — protótipo de interface. Pode tocar, marcar, migrar e criar itens de verdade.</div>
+
+<header>
+  <span class="badge">Método Bullet Journal</span>
+  <h1>Rotina</h1>
+  <p>App de rotina que respeita o método de verdade: registro rápido, log diário, mensal e futuro, migração das tarefas e coleções — não é só mais uma lista de tarefas.</p>
+</header>
+
+<div class="wrap layout">
+
+  <!-- ===== PHONE ===== -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="screen">
+        <div class="sbar"><span id="clock">08:42</span><span>▮▮▮ 84%</span></div>
+        <div class="apphead">
+          <div class="d" id="viewKicker">Log diário</div>
+          <h2 id="viewTitle">Quinta, 14 de agosto</h2>
+          <div class="sub" id="viewSub">3 tarefas abertas · 1 evento</div>
+        </div>
+
+        <div class="body" id="screen"></div>
+
+        <div class="addbar" id="addbar">
+          <div class="sigpick">
+            <button class="sigbtn on" data-sig="task" title="Tarefa">•</button>
+            <button class="sigbtn" data-sig="evento" title="Evento">○</button>
+            <button class="sigbtn" data-sig="nota" title="Nota">—</button>
+          </div>
+          <input id="newTxt" placeholder="Registro rápido..." />
+          <button class="addgo" id="addBtn">+</button>
+        </div>
+
+        <div class="tabs">
+          <button class="tab on" data-view="dia"><i>📓</i>Diário</button>
+          <button class="tab" data-view="mes"><i>🗓️</i>Mensal</button>
+          <button class="tab" data-view="futuro"><i>🔭</i>Futuro</button>
+          <button class="tab" data-view="colecoes"><i>📚</i>Coleções</button>
+          <button class="tab" data-view="habitos"><i>✅</i>Hábitos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EXPLAIN ===== -->
+  <div>
+    <div class="card try">
+      <h3>Experimente agora</h3>
+      <p>É interativo de verdade — mexa à vontade:</p>
+      <ol>
+        <li><b>Toque numa tarefa</b> pra concluir (× riscado)</li>
+        <li><b>Toque de novo</b> pra migrar (&gt;) — o ritual do BuJo</li>
+        <li>Escreva algo e toque <b>+</b> pra registrar (escolha • tarefa, ○ evento ou — nota)</li>
+        <li>Troque as abas: <b>Mensal</b>, <b>Futuro</b>, <b>Coleções</b> e <b>Hábitos</b></li>
+        <li>Nos hábitos, <b>toque nos quadradinhos</b> pra marcar o dia</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>O método, respeitado</h3>
+      <p>A maioria dos apps chama de "bullet journal" uma lista de tarefas comum. Estes são os pontos que fazem a diferença:</p>
+      <ul>
+        <li data-s="•"><b>Registro rápido</b> com os significantes reais: • tarefa, ○ evento, — nota</li>
+        <li data-s="×"><b>Concluída</b>, e não só apagada — o histórico continua lá</li>
+        <li data-s="&gt;"><b>Migração</b>: a tarefa que não foi feita é movida conscientemente, que é o coração do método</li>
+        <li data-s="&lt;"><b>Agendada</b> pro log futuro, quando tem data pra frente</li>
+        <li data-s="□"><b>Log mensal</b> com a visão do mês e os dias que têm registro</li>
+        <li data-s="⌘"><b>Coleções</b> personalizadas (hábitos, leituras, projetos) e o índice</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>O que entra no app</h3>
+      <ul>
+        <li data-s="✓"><b>Offline primeiro</b> — abre e registra sem internet, sincroniza depois</li>
+        <li data-s="✓"><b>Registro em 2 toques</b> — se demorar, a pessoa abandona no terceiro dia</li>
+        <li data-s="✓"><b>Busca e tags</b> pra achar qualquer anotação antiga</li>
+        <li data-s="✓"><b>Lembretes</b> e revisão diária/mensal (o momento de migrar)</li>
+        <li data-s="✓"><b>Habit tracker</b> visual, com sequência (streak)</li>
+        <li data-s="✓"><b>Android</b> — e se um dia quiser iOS, sai do mesmo código (React Native)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Sobre esta demo</h3>
+      <p>Layout, cores e conteúdo são um ponto de partida — na versão real eu sigo a sua identidade e as suas preferências. Fiz isso pra você ver o fluxo funcionando antes de decidir, em vez de só ler uma proposta.</p>
+    </div>
+  </div>
+</div>
+
+<footer>Protótipo de interface · HTML, CSS e JavaScript · funciona no celular</footer>
+
+<script>
+  var state = {
+    view: 'dia',
+    sig: 'task',
+    dia: [
+      {id:1, sig:'task', t:'Terminar relatório do cliente', st:'open', tag:'trabalho'},
+      {id:2, sig:'evento', t:'Reunião de equipe — 15h', st:'open', tag:'trabalho'},
+      {id:3, sig:'task', t:'Comprar presente da Ana', st:'done', tag:'pessoal'},
+      {id:4, sig:'task', t:'Responder e-mails pendentes', st:'open', tag:''},
+      {id:5, sig:'nota', t:'Ideia: separar 30 min de leitura antes de dormir', st:'open', tag:''},
+      {id:6, sig:'task', t:'Academia', st:'migrated', tag:'saúde'}
+    ],
+    futuro: [
+      {id:20, sig:'task', t:'Renovar plano de saúde', st:'open', tag:'setembro'},
+      {id:21, sig:'evento', t:'Aniversário da Ana', st:'open', tag:'12 set'},
+      {id:22, sig:'task', t:'Planejar viagem de fim de ano', st:'open', tag:'outubro'}
+    ],
+    colecoes: [
+      {n:'Livros para ler', c:'7 itens · 2 concluídos'},
+      {n:'Metas do trimestre', c:'4 itens · em andamento'},
+      {n:'Ideias de projeto', c:'11 anotações'},
+      {n:'Compras da casa', c:'5 itens'}
+    ],
+    habitos: [
+      {n:'Beber água', d:[1,1,1,0,1,1,0]},
+      {n:'Ler 20 min', d:[1,0,1,1,1,0,0]},
+      {n:'Exercício', d:[0,1,0,1,0,1,0]},
+      {n:'Dormir cedo', d:[1,1,0,0,1,1,1]}
+    ],
+    nextId: 100
+  };
+
+  var SIG = {task:'•', evento:'○', nota:'—'};
+  var SIGDONE = '×', SIGMIG = '>';
+  var $ = function(id){ return document.getElementById(id); };
+
+  function sigOf(e){
+    if(e.sig!=='task') return SIG[e.sig];
+    if(e.st==='done') return SIGDONE;
+    if(e.st==='migrated') return SIGMIG;
+    return SIG.task;
+  }
+
+  function entryHTML(e, i){
+    var cls = 'entry ' + (e.sig!=='task' ? e.sig : '') + ' ' + (e.st==='done'?'done':'') + ' ' + (e.st==='migrated'?'migrated':'');
+    var hint = e.sig==='task' ? '<span class="hint-tap">'+(e.st==='open'?'tocar: concluir':(e.st==='done'?'tocar: migrar':'tocar: reabrir'))+'</span>' : '';
+    return '<div class="'+cls+'" data-i="'+i+'">'+
+      '<div class="sig">'+sigOf(e)+'</div>'+
+      '<div class="etxt">'+e.t+(e.st==='migrated'?' <span class="etag">migrada →</span>':'')+'</div>'+
+      (e.tag?'<span class="etag">'+e.tag+'</span>':'')+hint+'</div>';
+  }
+
+  function render(){
+    var s = $('screen'), h='';
+    var v = state.view;
+    $('addbar').style.display = (v==='dia'||v==='futuro') ? 'flex' : 'none';
+
+    if(v==='dia'){
+      $('viewKicker').textContent='Log diário';
+      $('viewTitle').textContent='Quinta, 14 de agosto';
+      var abertas = state.dia.filter(function(e){return e.sig==='task'&&e.st==='open';}).length;
+      var ev = state.dia.filter(function(e){return e.sig==='evento';}).length;
+      $('viewSub').textContent = abertas+' tarefa'+(abertas===1?'':'s')+' aberta'+(abertas===1?'':'s')+' · '+ev+' evento'+(ev===1?'':'s');
+      h = state.dia.map(entryHTML).join('');
+      if(!state.dia.length) h='<div class="empty">Nada registrado hoje.<br>Use o registro rápido abaixo. ↓</div>';
+    }
+    else if(v==='mes'){
+      $('viewKicker').textContent='Log mensal';
+      $('viewTitle').textContent='Agosto de 2026';
+      $('viewSub').textContent='Visão do mês · toque num dia';
+      h = '<div class="month">';
+      ['D','S','T','Q','Q','S','S'].forEach(function(d){ h += '<div style="text-align:center;font-size:.64rem;color:#a99e8c;font-weight:700">'+d+'</div>'; });
+      for(var d=1; d<=31; d++){
+        var isT = d===14, pip = [3,7,9,12,14,18,22,27].indexOf(d)>-1;
+        h += '<div class="mday'+(isT?' today':'')+'"><b>'+d+'</b>'+(pip&&!isT?'<span class="pip"></span>':'')+'</div>';
+      }
+      h += '</div>';
+      h += '<div class="sechead">Tarefas do mês <span class="count">4</span></div>';
+      h += [{sig:'task',t:'Fechar orçamento do trimestre',st:'open',tag:''},
+            {sig:'task',t:'Consulta médica',st:'done',tag:''},
+            {sig:'evento',t:'Viagem a trabalho — 21 a 23',st:'open',tag:''},
+            {sig:'task',t:'Revisar metas de agosto',st:'open',tag:''}].map(entryHTML).join('');
+    }
+    else if(v==='futuro'){
+      $('viewKicker').textContent='Log futuro';
+      $('viewTitle').textContent='Próximos meses';
+      $('viewSub').textContent='O que não é para agora — mas não pode ser esquecido';
+      h = state.futuro.map(function(e,i){ return entryHTML(e, i); }).join('');
+    }
+    else if(v==='colecoes'){
+      $('viewKicker').textContent='Coleções';
+      $('viewTitle').textContent='Suas listas';
+      $('viewSub').textContent=state.colecoes.length+' coleções · índice sempre à mão';
+      h = state.colecoes.map(function(c){
+        return '<div class="coll"><b>'+c.n+'</b><small>'+c.c+'</small></div>';
+      }).join('');
+      h += '<div class="coll" style="border-style:dashed;text-align:center;color:#a99e8c"><b>+ Nova coleção</b></div>';
+    }
+    else if(v==='habitos'){
+      $('viewKicker').textContent='Habit tracker';
+      $('viewTitle').textContent='Seus hábitos';
+      $('viewSub').textContent='Últimos 7 dias · toque pra marcar';
+      h = '<div class="habit">';
+      state.habitos.forEach(function(hb, hi){
+        h += '<div class="habit-row"><b>'+hb.n+'</b><div class="dots">';
+        hb.d.forEach(function(on, di){
+          h += '<span class="dot'+(on?' on':'')+'" data-h="'+hi+'" data-d="'+di+'"></span>';
+        });
+        h += '</div></div>';
+      });
+      h += '</div>';
+      var tot=0, don=0;
+      state.habitos.forEach(function(hb){ hb.d.forEach(function(x){ tot++; if(x) don++; }); });
+      h += '<div style="text-align:center;margin-top:14px;font-size:.86rem;color:#7d7568">Semana: <b style="color:#3f7d58">'+Math.round(don/tot*100)+'%</b> dos hábitos cumpridos</div>';
+    }
+    s.innerHTML = h;
+    bind();
+  }
+
+  function bind(){
+    [].forEach.call(document.querySelectorAll('#screen .entry'), function(n){
+      n.onclick = function(){
+        var i = +n.getAttribute('data-i');
+        var list = state.view==='futuro' ? state.futuro : state.dia;
+        var e = list[i];
+        if(!e || e.sig!=='task') return;
+        e.st = e.st==='open' ? 'done' : (e.st==='done' ? 'migrated' : 'open');
+        render();
+      };
+    });
+    [].forEach.call(document.querySelectorAll('#screen .dot'), function(n){
+      n.onclick = function(){
+        var hi=+n.getAttribute('data-h'), di=+n.getAttribute('data-d');
+        state.habitos[hi].d[di] = state.habitos[hi].d[di] ? 0 : 1;
+        render();
+      };
+    });
+  }
+
+  [].forEach.call(document.querySelectorAll('.tab'), function(t){
+    t.onclick = function(){
+      [].forEach.call(document.querySelectorAll('.tab'), function(x){ x.classList.remove('on'); });
+      t.classList.add('on');
+      state.view = t.getAttribute('data-view');
+      render();
+    };
+  });
+  [].forEach.call(document.querySelectorAll('.sigbtn'), function(b){
+    b.onclick = function(){
+      [].forEach.call(document.querySelectorAll('.sigbtn'), function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      state.sig = b.getAttribute('data-sig');
+    };
+  });
+  function addEntry(){
+    var v = $('newTxt').value.trim();
+    if(!v) return;
+    var item = {id:state.nextId++, sig:state.sig, t:v, st:'open', tag:''};
+    if(state.view==='futuro') state.futuro.unshift(item); else state.dia.push(item);
+    $('newTxt').value='';
+    render();
+    var b=$('screen'); b.scrollTop = b.scrollHeight;
+  }
+  $('addBtn').onclick = addEntry;
+  $('newTxt').addEventListener('keydown', function(e){ if(e.key==='Enter') addEntry(); });
+
+  render();
+</script>
+</body>
+</html>
