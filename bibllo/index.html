@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blog + Portal Admin — demonstração navegável</title>
+<meta name="description" content="Demo do blog: destaques, filtro por categoria, busca, grid com paginação e newsletter — mais o portal administrativo para publicar sem depender de programador." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --blue:#1f5fd0; --blue-d:#1748a3; --blue-l:#eef4ff; --yellow:#ffc93c; --yellow-d:#e8b021;
+    --ink:#17233a; --muted:#66738c; --line:#e6ecf5; --bg:#f6f8fc; --white:#fff;
+    --ok:#2e8b57; --shadow:0 12px 34px rgba(23,35,58,.10); --shadow-sm:0 2px 8px rgba(23,35,58,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  .note{background:var(--ink);color:#cfdcf0;font-size:.8rem;text-align:center;padding:8px 14px}
+  .note b{color:#fff}
+
+  /* modo */
+  .modebar{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:80;box-shadow:var(--shadow-sm)}
+  .modein{display:flex;align-items:center;gap:14px;height:56px}
+  .mtag{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .modes{display:flex;gap:5px;background:var(--bg);padding:4px;border-radius:10px}
+  .mode{border:0;background:none;padding:8px 15px;border-radius:7px;cursor:pointer;font-family:'Inter';font-size:.87rem;font-weight:600;color:var(--muted);transition:.15s}
+  .mode.on{background:var(--white);color:var(--blue);box-shadow:var(--shadow-sm)}
+  .modein .hint{margin-left:auto;font-size:.78rem;color:var(--muted)}
+
+  .view{display:none}
+  .view.on{display:block;animation:f .35s ease}
+  @keyframes f{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ===== SITE ===== */
+  .topnav{background:var(--blue);color:#fff}
+  .tn{display:flex;align-items:center;gap:26px;height:58px}
+  .logo{font-weight:800;font-size:1.32rem;letter-spacing:-.02em}
+  .logo span{color:var(--yellow)}
+  .tn nav{display:flex;gap:19px;font-size:.9rem}
+  .tn nav a{opacity:.9;padding:4px 0;border-bottom:2px solid transparent}
+  .tn nav a:hover{opacity:1}
+  .tn nav a.act{opacity:1;font-weight:600;border-bottom-color:var(--yellow)}
+  .tn .rt{margin-left:auto;display:flex;align-items:center;gap:11px}
+  .btn-o{border:1px solid rgba(255,255,255,.55);border-radius:8px;padding:7px 15px;font-size:.86rem;font-weight:600}
+  .btn-y{background:var(--yellow);color:#20304d;border:0;border-radius:8px;padding:8px 17px;font-size:.86rem;font-weight:700;cursor:pointer}
+  .icn{width:18px;height:18px;opacity:.9}
+
+  .sechd{display:flex;align-items:center;gap:8px;margin:26px 0 4px;font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow-d)}
+  h1.big{font-size:1.75rem;font-weight:800;letter-spacing:-.02em;margin-bottom:18px;max-width:22ch;line-height:1.22}
+
+  .feat{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin-bottom:26px}
+  .fmain{background:var(--blue-l);border:1px solid var(--line);border-radius:14px;padding:26px;position:relative;overflow:hidden;cursor:pointer;transition:.2s}
+  .fmain:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .fmain h2{font-size:1.42rem;font-weight:800;line-height:1.25;margin:9px 0 9px;max-width:15ch;letter-spacing:-.01em}
+  .fmain p{color:var(--muted);font-size:.92rem;max-width:26ch}
+  .mascot{position:absolute;right:-10px;bottom:-6px;width:172px;opacity:.98}
+  .fside{display:grid;grid-template-rows:auto 1fr;gap:12px}
+  .fs2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:13px;overflow:hidden;cursor:pointer;transition:.2s;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#cfe0fb}
+  .card .ph{height:104px;background:linear-gradient(135deg,#dfe8f7,#c9d8f0);position:relative;flex:none}
+  .card.wide{flex-direction:row}
+  .card.wide .ph{width:132px;height:auto;min-height:96px}
+  .card .bd{padding:11px 13px 13px;flex:1;display:flex;flex-direction:column}
+  .cat{display:inline-block;font-size:.68rem;font-weight:700;color:var(--blue);background:var(--blue-l);padding:3px 8px;border-radius:5px;margin-bottom:6px;align-self:flex-start}
+  .card h3{font-size:.9rem;font-weight:600;line-height:1.35}
+  .by{display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:10px;font-size:.72rem;color:var(--muted)}
+  .av{width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+
+  .filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:22px 0 16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+  .chip{border:1px solid var(--line);background:var(--white);border-radius:999px;padding:7px 15px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;transition:.15s}
+  .chip:hover{border-color:#bcd3f5}
+  .chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .srch{margin-left:auto;position:relative}
+  .srch input{border:1px solid var(--line);border-radius:999px;padding:9px 36px 9px 15px;font-family:'Inter';font-size:.86rem;width:210px;background:var(--white)}
+  .srch input:focus{outline:0;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,95,208,.10)}
+  .srch svg{position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:.45}
+
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .empty{grid-column:1/-1;text-align:center;padding:40px 16px;color:var(--muted);font-size:.92rem}
+  .pag{display:flex;justify-content:center;align-items:center;gap:6px;margin:26px 0}
+  .pg{min-width:32px;height:32px;border:1px solid var(--line);background:var(--white);border-radius:7px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .pg.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .pg:disabled{opacity:.4;cursor:default}
+
+  .news{background:var(--blue);border-radius:16px;padding:30px 34px;color:#fff;display:flex;align-items:center;gap:24px;margin:8px 0 30px;position:relative;overflow:hidden}
+  .news h2{font-size:1.5rem;font-weight:800;line-height:1.2}
+  .news h2 em{font-style:normal;color:var(--yellow)}
+  .news p{opacity:.9;font-size:.9rem;margin:7px 0 14px;max-width:34ch}
+  .nform{display:flex;gap:8px;max-width:390px}
+  .nform input{flex:1;border:0;border-radius:8px;padding:11px 13px;font-family:'Inter';font-size:.88rem}
+  .nform input:focus{outline:2px solid var(--yellow)}
+  .nok{display:none;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);border-radius:8px;padding:9px 13px;font-size:.85rem;margin-top:10px}
+  .news .mascot2{margin-left:auto;width:150px;flex:none}
+
+  footer.st{background:var(--ink);color:#9fb0cc;padding:30px 0;font-size:.85rem}
+  .fcols{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:26px}
+  .fcols h4{color:#fff;font-size:.85rem;margin-bottom:9px}
+  .fcols a{display:block;padding:3px 0;color:#9fb0cc}
+  .fcols a:hover{color:#fff}
+
+  /* artigo */
+  .post{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:30px;margin:22px 0}
+  .post .cat{font-size:.72rem}
+  .post h1{font-size:1.75rem;font-weight:800;line-height:1.25;margin:8px 0 12px;letter-spacing:-.02em}
+  .pmeta{display:flex;align-items:center;gap:9px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px;font-size:.82rem;color:var(--muted)}
+  .pmeta .av{width:32px;height:32px;font-size:.74rem}
+  .post p{margin-bottom:13px;color:#3d4a63}
+  .post h2{font-size:1.15rem;margin:20px 0 8px}
+  .backl{display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-weight:600;font-size:.88rem;cursor:pointer;margin-top:8px}
+
+  /* ===== ADMIN ===== */
+  .adm{display:grid;grid-template-columns:190px 1fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:22px 0 34px;box-shadow:var(--shadow-sm)}
+  .side{background:#101a2d;padding:16px 0}
+  .side .lg{color:#fff;font-weight:800;font-size:1.1rem;padding:0 18px 14px;border-bottom:1px solid #1e2b45;margin-bottom:10px}
+  .side .lg span{color:var(--yellow)}
+  .snav{display:flex;flex-direction:column}
+  .snav button{background:none;border:0;text-align:left;padding:10px 18px;color:#96a6c2;font-family:'Inter';font-size:.87rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:9px;border-left:3px solid transparent}
+  .snav button:hover{color:#fff;background:#182541}
+  .snav button.on{color:#fff;background:#182541;border-left-color:var(--yellow);font-weight:600}
+  .amain{padding:20px 22px}
+  .ahd{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .ahd h2{font-size:1.2rem;font-weight:700}
+  .ahd .btn-y{margin-left:auto}
+  .akpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .k{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px}
+  .k small{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+  .k b{display:block;font-size:1.5rem;font-weight:800;margin-top:2px}
+  table{width:100%;border-collapse:collapse;font-size:.87rem}
+  th{text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:8px 6px;border-bottom:1px solid var(--line)}
+  td{padding:9px 6px;border-bottom:1px solid #f0f4fa;vertical-align:middle}
+  tr.new td{background:#fffbe9;animation:fl 1.6s ease}
+  @keyframes fl{0%{background:#fff2c4}100%{background:#fffbe9}}
+  .st{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .st.pub{background:#e6f4ec;color:var(--ok)} .st.rasc{background:#f0f2f7;color:var(--muted)} .st.age{background:#fff4dd;color:#a8720f}
+  .starb{background:none;border:0;cursor:pointer;font-size:1.05rem;line-height:1;padding:2px}
+  .fld{margin-bottom:12px}
+  .fld label{display:block;font-size:.76rem;font-weight:700;margin-bottom:5px;color:var(--ink)}
+  .fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-family:'Inter';font-size:.89rem;background:var(--white)}
+  .fld input:focus,.fld select:focus,.fld textarea:focus{outline:0;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,95,208,.1)}
+  .r2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .gpv{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-top:6px}
+  .gpv .u{font-size:.76rem;color:#0b7a34}
+  .gpv .t{color:#1a0dab;font-size:1.02rem;line-height:1.3;margin:2px 0 3px}
+  .gpv .d{font-size:.82rem;color:#4d5156}
+  .hintbox{background:var(--blue-l);border:1px solid #cfe0fb;border-radius:9px;padding:11px 13px;font-size:.83rem;color:#264a80;margin-top:12px}
+  .savedmsg{display:none;color:var(--ok);font-weight:600;font-size:.85rem;margin-left:10px}
+
+  .expl{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 30px;box-shadow:var(--shadow-sm)}
+  .expl h3{font-size:1.1rem;margin-bottom:6px}
+  .expl p{color:var(--muted);font-size:.93rem}
+  .expl ul{list-style:none;margin-top:10px}
+  .expl li{padding:7px 0 7px 22px;position:relative;font-size:.92rem;border-bottom:1px dashed var(--line)}
+  .expl li:last-child{border-bottom:0}
+  .expl li::before{content:"";position:absolute;left:3px;top:14px;width:7px;height:7px;border-radius:50%;background:var(--yellow)}
+
+  @media(max-width:900px){
+    .feat{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}
+    .adm{grid-template-columns:1fr}.side{display:flex;overflow-x:auto}.snav{flex-direction:row}
+    .side .lg{display:none}.akpis{grid-template-columns:1fr 1fr}
+    .tn nav{display:none}.news{flex-direction:column;align-items:flex-start}.news .mascot2{display:none}
+    .fcols{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:560px){.grid{grid-template-columns:1fr}.srch{margin-left:0;width:100%}.srch input{width:100%}}
+</style>
+</head>
+<body>
+
+<div class="note"><b>Demonstração navegável</b> — o filtro por categoria, a busca, a paginação e o portal admin funcionam de verdade. Conteúdo e identidade são ilustrativos.</div>
+
+<div class="modebar">
+  <div class="wrap modein">
+    <span class="mtag">Ver como</span>
+    <div class="modes">
+      <button class="mode on" data-v="site">Blog (leitor)</button>
+      <button class="mode" data-v="admin">Portal admin</button>
+    </div>
+    <span class="hint">Publique um artigo no admin e ele aparece no blog na hora →</span>
+  </div>
+</div>
+
+<!-- ================= SITE ================= -->
+<div class="view on" id="v-site">
+  <div class="topnav">
+    <div class="wrap tn">
+      <span class="logo">bibllo<span>.</span></span>
+      <nav>
+        <a>Início</a><a>Trilhas</a><a>Biblioteca</a><a>Planos</a><a>Para Empresas</a><a class="act">Blog</a>
+      </nav>
+      <div class="rt">
+        <svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <span class="btn-o">Entrar</span>
+        <button class="btn-y">Começar agora</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" id="listView">
+    <div class="sechd">★ Posts em destaque</div>
+    <h1 class="big">Destaques que impulsionam sua gestão e seu negócio</h1>
+    <div class="feat" id="feat"></div>
+
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+    <div class="pag" id="pag"></div>
+
+    <div class="news">
+      <div>
+        <h2>Aprenda todo dia.<br><em>Aplique sempre.</em></h2>
+        <p>Receba novos conteúdos, dicas e materiais exclusivos direto no seu e-mail.</p>
+        <div class="nform">
+          <input id="nmail" placeholder="Seu melhor e-mail" />
+          <button class="btn-y" id="nbtn">Quero receber</button>
+        </div>
+        <div class="nok" id="nok">Inscrição registrada — ela já aparece no portal admin →</div>
+      </div>
+      <svg class="mascot2" viewBox="0 0 200 150" aria-hidden="true">
+        <ellipse cx="100" cy="140" rx="62" ry="7" fill="#0d47a1" opacity=".3"/>
+        <path d="M70 60c0-17 13-30 30-30s30 13 30 30v34H70z" fill="#123a7a"/>
+        <path d="M75 33c8-14 42-14 50 0-8-6-42-6-50 0z" fill="#0e2c5e"/>
+        <circle cx="88" cy="62" r="12" fill="#fff"/><circle cx="112" cy="62" r="12" fill="#fff"/>
+        <circle cx="90" cy="63" r="5" fill="#17233a"/><circle cx="110" cy="63" r="5" fill="#17233a"/>
+        <path d="M76 62h48" stroke="#ffc93c" stroke-width="3"/>
+        <path d="M88 80q12 9 24 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <rect x="74" y="94" width="52" height="34" rx="6" fill="#ffc93c"/>
+        <path d="M100 100v16m-8-8h16" stroke="#17233a" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="wrap" id="postView" style="display:none"></div>
+
+  <footer class="st">
+    <div class="wrap fcols">
+      <div>
+        <div class="logo" style="color:#fff">bibllo<span>.</span></div>
+        <p style="margin-top:9px;max-width:30ch">Conteúdo e ferramentas para você gerir melhor o seu negócio.</p>
+      </div>
+      <div><h4>Navegação</h4><a>Início</a><a>Trilhas</a><a>Biblioteca</a><a>Planos</a><a>Blog</a></div>
+      <div><h4>Suporte</h4><a>Central de ajuda</a><a>Contato</a><a>Termos de uso</a><a>Privacidade</a></div>
+      <div><h4>Contato</h4><a>contato@exemplo.com</a><a>Seg a sex, 9h às 18h</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ================= ADMIN ================= -->
+<div class="view" id="v-admin">
+  <div class="wrap">
+    <div class="adm">
+      <div class="side">
+        <div class="lg">bibllo<span>.</span></div>
+        <div class="snav">
+          <button class="on" data-a="artigos">Artigos</button>
+          <button data-a="novo">Novo artigo</button>
+          <button data-a="cats">Categorias</button>
+          <button data-a="autores">Autores</button>
+          <button data-a="news">Newsletter</button>
+        </div>
+      </div>
+      <div class="amain" id="apane"></div>
+    </div>
+
+    <div class="expl">
+      <h3>O que você faz sozinho por aqui</h3>
+      <p>É este portal que evita o blog ficar parado esperando programador — a sua equipe publica direto.</p>
+      <ul>
+        <li>Escrever, editar, agendar e publicar artigos</li>
+        <li>Criar categorias — as mesmas que aparecem no filtro da home</li>
+        <li>Marcar o post em destaque (o card grande) e os 3 secundários</li>
+        <li>Cadastrar autores com foto e bio, que alimentam a página de autor</li>
+        <li>Editar título e descrição de SEO com prévia do Google</li>
+        <li>Ver e exportar quem se inscreveu na newsletter</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+var CATS=['Vendas','Gestão','Finanças','Pessoas','Marketing','Carreira','Tendências'];
+var AUT=[{n:'Equipe Bibllo',i:'EB'},{n:'Marina Costa',i:'MC'},{n:'Rafael Dias',i:'RD'}];
+var P=[
+ {t:'Fluxo de caixa: o guia completo para manter sua empresa saudável',c:'Finanças',a:0,d:'12/08/2026',f:1,s:'published',ex:'Aprenda a controlar entradas, saídas e previsões para tomar decisões com mais segurança.'},
+ {t:'CFOP 5949: o que é, quando usar e como emitir corretamente',c:'Finanças',a:0,d:'11/08/2026',f:2,s:'published',ex:'Entenda de uma vez esse código e evite erro na emissão.'},
+ {t:'Lucro Real: o que é, como funciona e quem deve adotar',c:'Finanças',a:1,d:'10/08/2026',f:2,s:'published',ex:'Compare regimes e descubra qual faz sentido para o seu porte.'},
+ {t:'Varejo: tipos, funcionamento e como gerenciar sua operação',c:'Gestão',a:0,d:'09/08/2026',f:2,s:'published',ex:'Do estoque à vitrine: o que realmente move o resultado.'},
+ {t:'Venda assistida: o que é, benefícios e como implementar',c:'Vendas',a:2,d:'08/08/2026',f:0,s:'published',ex:'Atendimento que orienta e aumenta o ticket médio.'},
+ {t:'Desconto do INSS: tabela atualizada e como calcular sem erro',c:'Pessoas',a:1,d:'07/08/2026',f:0,s:'published',ex:'Passo a passo com a tabela vigente e exemplos.'},
+ {t:'Controle financeiro pessoal: como fazer e ferramentas',c:'Finanças',a:0,d:'06/08/2026',f:0,s:'published',ex:'Organize o seu antes de organizar o da empresa.'},
+ {t:'O que é DRE: para que serve e como fazer (com planilha)',c:'Finanças',a:2,d:'05/08/2026',f:0,s:'published',ex:'A demonstração que mostra se o negócio dá lucro de verdade.'},
+ {t:'Funil de vendas: como montar o seu do zero',c:'Vendas',a:1,d:'04/08/2026',f:0,s:'published',ex:'Etapas, métricas e os erros mais comuns.'},
+ {t:'Marketing local: como aparecer para quem está perto',c:'Marketing',a:2,d:'03/08/2026',f:0,s:'published',ex:'Google Meu Negócio e o básico bem feito.'},
+ {t:'Plano de carreira: como estruturar na pequena empresa',c:'Carreira',a:1,d:'02/08/2026',f:0,s:'published',ex:'Reter talento sem precisar de orçamento grande.'},
+ {t:'Tendências de gestão para 2027: o que já dá para aplicar',c:'Tendências',a:0,d:'01/08/2026',f:0,s:'published',ex:'Sem futurologia: o que muda na prática.'},
+ {t:'Precificação: como calcular preço de venda sem perder margem',c:'Finanças',a:2,d:'29/07/2026',f:0,s:'published',ex:'Custo, markup e o que quase todo mundo esquece.'},
+ {t:'Gestão de estoque: giro, ruptura e capital parado',c:'Gestão',a:1,d:'28/07/2026',f:0,s:'published',ex:'Menos dinheiro na prateleira, mais no caixa.'},
+ {t:'Contratação: como fazer a primeira sem errar',c:'Pessoas',a:0,d:'27/07/2026',f:0,s:'rascunho',ex:'Da descrição da vaga ao período de experiência.'}
+];
+var SUBS=[{e:'joao.pereira@empresa.com.br',d:'12/08/2026'},{e:'contato@lojadamaria.com',d:'11/08/2026'},{e:'financeiro@oficina21.com.br',d:'10/08/2026'}];
+
+var state={cat:'Todos',q:'',page:1,per:8,apane:'artigos',editing:null};
+var $=function(i){return document.getElementById(i)};
+var pub=function(){return P.filter(function(p){return p.s==='published'})};
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+
+/* ---------- SITE ---------- */
+function cardHTML(p,i,wide){
+  var a=AUT[p.a];
+  return '<div class="card'+(wide?' wide':'')+'" data-post="'+i+'"><div class="ph"></div><div class="bd">'+
+    '<span class="cat">'+p.c+'</span><h3>'+esc(p.t)+'</h3>'+
+    '<div class="by"><span class="av">'+a.i+'</span>'+a.n+' · '+p.d+'</div></div></div>';
+}
+function renderFeat(){
+  var f1=P.map(function(p,i){return{p:p,i:i}}).filter(function(o){return o.p.f===1&&o.p.s==='published'})[0];
+  var f2=P.map(function(p,i){return{p:p,i:i}}).filter(function(o){return o.p.f===2&&o.p.s==='published'}).slice(0,3);
+  var h='';
+  if(f1){var a=AUT[f1.p.a];
+    h+='<div class="fmain" data-post="'+f1.i+'"><span class="cat">'+f1.p.c+'</span>'+
+       '<h2>'+esc(f1.p.t)+'</h2><p>'+esc(f1.p.ex)+'</p>'+
+       '<div class="by" style="margin-top:16px"><span class="av">'+a.i+'</span>'+a.n+' · '+f1.p.d+'</div>'+
+       '<svg class="mascot" viewBox="0 0 200 150" aria-hidden="true"><path d="M70 62c0-17 13-30 30-30s30 13 30 30v36H70z" fill="#123a7a"/><path d="M75 35c8-14 42-14 50 0-8-6-42-6-50 0z" fill="#0e2c5e"/><circle cx="88" cy="64" r="12" fill="#fff"/><circle cx="112" cy="64" r="12" fill="#fff"/><circle cx="90" cy="65" r="5" fill="#17233a"/><circle cx="110" cy="65" r="5" fill="#17233a"/><path d="M76 64h48" stroke="#ffc93c" stroke-width="3"/><path d="M88 82q12 9 24 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="62" y="100" width="76" height="42" rx="5" fill="#ffc93c"/><rect x="70" y="107" width="60" height="28" rx="3" fill="#fff8e2"/></svg></div>';
+  }
+  h+='<div class="fside">';
+  if(f2[0]) h+=cardHTML(f2[0].p,f2[0].i,true);
+  h+='<div class="fs2">'+f2.slice(1).map(function(o){return cardHTML(o.p,o.i)}).join('')+'</div></div>';
+  $('feat').innerHTML=h;
+}
+function renderFilters(){
+  var all=['Todos'].concat(CATS);
+  $('filters').innerHTML=all.map(function(c){return '<button class="chip'+(state.cat===c?' on':'')+'" data-cat="'+c+'">'+c+'</button>'}).join('')+
+    '<div class="srch"><input id="q" placeholder="Buscar artigo..." value="'+esc(state.q)+'"/><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>';
+}
+function filtered(){
+  var q=state.q.toLowerCase().trim();
+  return P.map(function(p,i){return{p:p,i:i}}).filter(function(o){
+    if(o.p.s!=='published') return false;
+    if(state.cat!=='Todos'&&o.p.c!==state.cat) return false;
+    if(q&&(o.p.t+' '+o.p.ex+' '+o.p.c).toLowerCase().indexOf(q)<0) return false;
+    return true;
+  });
+}
+function renderGrid(){
+  var f=filtered(), tot=Math.max(1,Math.ceil(f.length/state.per));
+  if(state.page>tot) state.page=1;
+  var pg=f.slice((state.page-1)*state.per, state.page*state.per);
+  $('grid').innerHTML = pg.length? pg.map(function(o){return cardHTML(o.p,o.i)}).join('')
+    : '<div class="empty">Nenhum artigo encontrado'+(state.q?' para "'+esc(state.q)+'"':'')+'.<br>Tente outra categoria ou limpe a busca.</div>';
+  var h='<button class="pg" id="pv" '+(state.page===1?'disabled':'')+'>‹</button>';
+  for(var i=1;i<=tot;i++) h+='<button class="pg'+(i===state.page?' on':'')+'" data-pg="'+i+'">'+i+'</button>';
+  h+='<button class="pg" id="nx2" '+(state.page===tot?'disabled':'')+'>›</button>';
+  h+='<span style="margin-left:10px;font-size:.82rem;color:var(--muted)">'+f.length+' artigo'+(f.length===1?'':'s')+'</span>';
+  $('pag').innerHTML=h;
+  bindSite();
+}
+function openPost(i){
+  var p=P[i], a=AUT[p.a];
+  $('listView').style.display='none';
+  var v=$('postView'); v.style.display='block';
+  v.innerHTML='<div class="post"><span class="cat">'+p.c+'</span><h1>'+esc(p.t)+'</h1>'+
+    '<div class="pmeta"><span class="av">'+a.i+'</span><b style="color:var(--ink)">'+a.n+'</b> · publicado em '+p.d+' · 6 min de leitura</div>'+
+    '<p><b>'+esc(p.ex)+'</b></p>'+
+    '<p>Este é um artigo de exemplo para mostrar a página interna: título, categoria, assinatura do autor, data e o corpo do texto com boa leitura no celular e no computador.</p>'+
+    '<h2>Por que isso importa</h2>'+
+    '<p>Na versão real, o conteúdo é escrito no portal administrativo e publicado pela sua equipe, sem depender de programador. A estrutura da página já sai marcada para o Google entender autoria, data e assunto.</p>'+
+    '<h2>Como aplicar no dia a dia</h2>'+
+    '<p>Cada artigo pode ter imagem de capa, categoria, autor e os campos de SEO definidos na hora da publicação — inclusive com prévia de como aparecerá no resultado de busca.</p>'+
+    '<div class="backl" id="back">‹ Voltar para o blog</div></div>';
+  window.scrollTo({top:0,behavior:'smooth'});
+  $('back').onclick=function(){ v.style.display='none'; $('listView').style.display='block'; window.scrollTo({top:0,behavior:'smooth'}); };
+}
+function bindSite(){
+  [].forEach.call(document.querySelectorAll('[data-post]'),function(n){ n.onclick=function(){openPost(+n.getAttribute('data-post'))} });
+  [].forEach.call(document.querySelectorAll('[data-cat]'),function(n){ n.onclick=function(){ state.cat=n.getAttribute('data-cat'); state.page=1; renderFilters(); renderGrid(); } });
+  [].forEach.call(document.querySelectorAll('[data-pg]'),function(n){ n.onclick=function(){ state.page=+n.getAttribute('data-pg'); renderGrid(); window.scrollTo({top:420,behavior:'smooth'}); } });
+  var pv=$('pv'), nx=$('nx2');
+  if(pv) pv.onclick=function(){ if(state.page>1){state.page--;renderGrid();} };
+  if(nx) nx.onclick=function(){ state.page++; renderGrid(); };
+  var q=$('q');
+  if(q) q.oninput=function(){ state.q=q.value; state.page=1; renderGrid(); var el=$('q'); if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length);} };
+}
+$('nbtn').onclick=function(){
+  var v=$('nmail').value.trim();
+  if(!v||v.indexOf('@')<0){ $('nmail').focus(); return; }
+  SUBS.unshift({e:v,d:'16/08/2026',novo:true});
+  $('nok').style.display='block'; $('nmail').value='';
+  if(state.apane==='news') renderAdmin();
+  setTimeout(function(){$('nok').style.display='none'},5000);
+};
+
+/* ---------- ADMIN ---------- */
+function renderAdmin(){
+  var h='', pane=state.apane;
+  if(pane==='artigos'){
+    h+='<div class="ahd"><h2>Artigos</h2><button class="btn-y" id="goNovo">+ Novo artigo</button></div>';
+    h+='<div class="akpis"><div class="k"><small>Publicados</small><b>'+pub().length+'</b></div>'+
+       '<div class="k"><small>Rascunhos</small><b>'+P.filter(function(p){return p.s!=='published'}).length+'</b></div>'+
+       '<div class="k"><small>Categorias</small><b>'+CATS.length+'</b></div>'+
+       '<div class="k"><small>Inscritos</small><b>'+SUBS.length+'</b></div></div>';
+    h+='<table><thead><tr><th>Título</th><th>Categoria</th><th>Autor</th><th>Status</th><th>Destaque</th><th></th></tr></thead><tbody>';
+    P.forEach(function(p,i){
+      h+='<tr class="'+(p.novo?'new':'')+'"><td><b>'+esc(p.t)+'</b><div style="font-size:.75rem;color:var(--muted)">'+p.d+'</div></td>'+
+        '<td>'+p.c+'</td><td>'+AUT[p.a].n+'</td>'+
+        '<td><span class="st '+(p.s==='published'?'pub':'rasc')+'">'+(p.s==='published'?'Publicado':'Rascunho')+'</span></td>'+
+        '<td><button class="starb" data-star="'+i+'" title="Marcar destaque">'+(p.f===1?'★':(p.f===2?'☆':'·'))+'</button>'+
+        '<span style="font-size:.7rem;color:var(--muted)">'+(p.f===1?' principal':(p.f===2?' secundário':''))+'</span></td>'+
+        '<td><button class="chip" data-edit="'+i+'" style="padding:4px 10px;font-size:.78rem">Editar</button></td></tr>';
+    });
+    h+='</tbody></table><div class="hintbox">Clique na estrela para alternar entre <b>destaque principal</b> (card grande), <b>secundário</b> (os 3 ao lado) e nenhum — depois volte ao blog e veja a home mudar.</div>';
+  }
+  else if(pane==='novo'){
+    var ed = state.editing!=null ? P[state.editing] : null;
+    h+='<div class="ahd"><h2>'+(ed?'Editar artigo':'Novo artigo')+'</h2></div>';
+    h+='<div class="fld"><label>Título</label><input id="fT" value="'+(ed?esc(ed.t):'')+'" placeholder="Título do artigo"/></div>';
+    h+='<div class="r2"><div class="fld"><label>Categoria</label><select id="fC">'+CATS.map(function(c){return '<option'+(ed&&ed.c===c?' selected':'')+'>'+c+'</option>'}).join('')+'</select></div>'+
+       '<div class="fld"><label>Autor</label><select id="fA">'+AUT.map(function(a,i){return '<option value="'+i+'"'+(ed&&ed.a===i?' selected':'')+'>'+a.n+'</option>'}).join('')+'</select></div></div>';
+    h+='<div class="fld"><label>Resumo (aparece no card)</label><textarea id="fE" rows="2" placeholder="Uma frase que dá vontade de clicar">'+(ed?esc(ed.ex):'')+'</textarea></div>';
+    h+='<div class="fld"><label>Conteúdo</label><textarea id="fB" rows="4" placeholder="Escreva o artigo aqui...">'+(ed?'':'')+'</textarea></div>';
+    h+='<div class="r2"><div class="fld"><label>Status</label><select id="fS"><option value="published"'+(ed&&ed.s==='published'?' selected':'')+'>Publicado</option><option value="rascunho"'+(ed&&ed.s!=='published'?' selected':'')+'>Rascunho</option></select></div>'+
+       '<div class="fld"><label>Destaque</label><select id="fF"><option value="0"'+(ed&&ed.f===0?' selected':'')+'>Nenhum</option><option value="1"'+(ed&&ed.f===1?' selected':'')+'>Principal (card grande)</option><option value="2"'+(ed&&ed.f===2?' selected':'')+'>Secundário</option></select></div></div>';
+    h+='<div class="fld"><label>SEO — título e descrição</label><input id="fSt" placeholder="Título que aparece no Google" value="'+(ed?esc(ed.t):'')+'"/>'+
+       '<textarea id="fSd" rows="2" style="margin-top:8px" placeholder="Descrição que aparece no Google">'+(ed?esc(ed.ex):'')+'</textarea>'+
+       '<div class="gpv"><div class="u">bibllo.com.br › blog › '+(ed?'artigo':'novo-artigo')+'</div><div class="t" id="pvT">'+(ed?esc(ed.t):'Título do artigo')+'</div><div class="d" id="pvD">'+(ed?esc(ed.ex):'A descrição aparece assim no resultado de busca.')+'</div></div></div>';
+    h+='<button class="btn-y" id="salvar">'+(ed?'Salvar alterações':'Publicar artigo')+'</button><span class="savedmsg" id="sv">✓ Salvo — já está no blog</span>';
+  }
+  else if(pane==='cats'){
+    h+='<div class="ahd"><h2>Categorias</h2></div>';
+    h+='<table><thead><tr><th>Categoria</th><th>Artigos</th><th></th></tr></thead><tbody>'+
+      CATS.map(function(c,i){return '<tr><td><b>'+c+'</b></td><td>'+pub().filter(function(p){return p.c===c}).length+'</td>'+
+        '<td><button class="chip" data-delcat="'+i+'" style="padding:4px 10px;font-size:.78rem">Remover</button></td></tr>'}).join('')+
+      '</tbody></table>';
+    h+='<div class="r2" style="margin-top:14px;align-items:end"><div class="fld" style="margin:0"><label>Nova categoria</label><input id="newCat" placeholder="Ex.: Tecnologia"/></div><button class="btn-y" id="addCat" style="height:40px">Adicionar</button></div>';
+    h+='<div class="hintbox">As categorias daqui são exatamente os filtros que aparecem na home do blog.</div>';
+  }
+  else if(pane==='autores'){
+    h+='<div class="ahd"><h2>Autores</h2></div><table><thead><tr><th>Autor</th><th>Artigos</th></tr></thead><tbody>'+
+      AUT.map(function(a,i){return '<tr><td><span class="av" style="display:inline-flex;margin-right:8px">'+a.i+'</span><b>'+a.n+'</b></td><td>'+pub().filter(function(p){return p.a===i}).length+'</td></tr>'}).join('')+'</tbody></table>'+
+      '<div class="hintbox">Cada autor tem página própria e assinatura nos cards — é o que dá autoridade ao conteúdo aos olhos do Google.</div>';
+  }
+  else if(pane==='news'){
+    h+='<div class="ahd"><h2>Newsletter</h2><button class="btn-y" id="exp">Exportar CSV</button></div>';
+    h+='<div class="akpis"><div class="k"><small>Inscritos</small><b>'+SUBS.length+'</b></div></div>';
+    h+='<table><thead><tr><th>E-mail</th><th>Inscrição</th></tr></thead><tbody>'+
+      SUBS.map(function(s){return '<tr class="'+(s.novo?'new':'')+'"><td>'+esc(s.e)+(s.novo?' <span style="font-size:.72rem;color:var(--muted)">· agora</span>':'')+'</td><td>'+s.d+'</td></tr>'}).join('')+'</tbody></table>';
+    h+='<div class="hintbox">Quem se inscreve no bloco do blog cai aqui na hora — teste: volte ao blog, inscreva um e-mail e retorne.</div>';
+  }
+  $('apane').innerHTML=h;
+  bindAdmin();
+}
+function bindAdmin(){
+  var gn=$('goNovo'); if(gn) gn.onclick=function(){ state.apane='novo'; state.editing=null; setSnav('novo'); renderAdmin(); };
+  [].forEach.call(document.querySelectorAll('[data-star]'),function(n){ n.onclick=function(){ var i=+n.getAttribute('data-star'); P[i].f=(P[i].f+1)%3; renderAdmin(); renderFeat(); }; });
+  [].forEach.call(document.querySelectorAll('[data-edit]'),function(n){ n.onclick=function(){ state.editing=+n.getAttribute('data-edit'); state.apane='novo'; setSnav('novo'); renderAdmin(); }; });
+  var sv=$('salvar');
+  if(sv) sv.onclick=function(){
+    var t=$('fT').value.trim(); if(!t){ $('fT').focus(); return; }
+    var obj={t:t,c:$('fC').value,a:+$('fA').value,d:'16/08/2026',f:+$('fF').value,s:$('fS').value,ex:$('fE').value.trim()||'Resumo do artigo.',novo:true};
+    if(state.editing!=null){ obj.novo=false; P[state.editing]=obj; } else { P.forEach(function(p){p.novo=false}); P.unshift(obj); }
+    state.editing=null; state.apane='artigos'; setSnav('artigos'); renderAdmin(); renderFeat(); renderGrid();
+  };
+  ['fT','fSt'].forEach(function(id){ var e=$(id); if(e) e.oninput=function(){ var p=$('pvT'); if(p) p.textContent=e.value||'Título do artigo'; }; });
+  ['fE','fSd'].forEach(function(id){ var e=$(id); if(e) e.oninput=function(){ var p=$('pvD'); if(p) p.textContent=e.value||'A descrição aparece assim no resultado de busca.'; }; });
+  var ac=$('addCat'); if(ac) ac.onclick=function(){ var v=$('newCat').value.trim(); if(!v)return; CATS.push(v); renderAdmin(); renderFilters(); bindSite(); };
+  [].forEach.call(document.querySelectorAll('[data-delcat]'),function(n){ n.onclick=function(){ CATS.splice(+n.getAttribute('data-delcat'),1); renderAdmin(); renderFilters(); bindSite(); }; });
+  var ex=$('exp'); if(ex) ex.onclick=function(){ ex.textContent='✓ Exportado'; setTimeout(function(){ex.textContent='Exportar CSV'},2000); };
+}
+function setSnav(a){ [].forEach.call(document.querySelectorAll('.snav button'),function(b){ b.classList.toggle('on', b.getAttribute('data-a')===a); }); }
+[].forEach.call(document.querySelectorAll('.snav button'),function(b){ b.onclick=function(){ state.apane=b.getAttribute('data-a'); state.editing=null; setSnav(state.apane); renderAdmin(); }; });
+[].forEach.call(document.querySelectorAll('.mode'),function(b){ b.onclick=function(){
+  [].forEach.call(document.querySelectorAll('.mode'),function(x){x.classList.remove('on')}); b.classList.add('on');
+  var v=b.getAttribute('data-v');
+  $('v-site').classList.toggle('on',v==='site'); $('v-admin').classList.toggle('on',v==='admin');
+  window.scrollTo({top:0,behavior:'smooth'});
+}; });
+
+renderFeat(); renderFilters(); renderGrid(); renderAdmin();
+</script>
+</body>
+</html>
