@@ -29,7 +29,8 @@ Aqui o pedido é uma **lista de itens**, não uma combinação:
 - acessórios com quantidade por item, com teto por acessório
 - alternador **Foto / Desenho**: a foto é do produto da aba; o desenho mostra a
   montagem inteira, com o complemento somando comprimento e os acessórios no lugar
-- **qualquer parte pode ser pedida sozinha**: complemento sem bancada, acessório sem nada — cada etapa entra ou sai do pedido
+- **as três etapas funcionam igual**: cada uma tem a chave "incluir no pedido", então dá pra pedir só o complemento, ou só um acessório
+- **cada parte mostra a foto dela** — nada é composto: a bancada tem a foto da bancada, o acessório tem a dele
 - resumo com itens e total, e um código que carrega o pedido inteiro na URL
 
 > Preços e fotos são exemplos. Esta é uma demonstração de layout — sem retaguarda.
