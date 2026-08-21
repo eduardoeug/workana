@@ -32,6 +32,7 @@ Aqui o pedido é uma **lista de itens**, não uma combinação:
 - **as três etapas funcionam igual**: cada uma tem a chave "incluir no pedido", então dá pra pedir só o complemento, ou só um acessório
 - **cada parte mostra a foto dela** — nada é composto: a bancada tem a foto da bancada, o acessório tem a dele
 - **só foto**: sem alternador. Configuração sem foto mostra um aviso de *Sem foto*, e há uma chave no cadastro para o desenho técnico entrar no lugar
+- **seção "Compre separado"** no rodapé, com título e descrição editáveis (pode virar "Promoções"): cada peça tem pedido próprio no WhatsApp e um botão para entrar no pedido que está sendo montado
 - **tudo é texto editável**: rótulo da aba de acessórios (pode virar "Promoções"), botão do WhatsApp, títulos e avisos
 - resumo com itens e total, e um código que carrega o pedido inteiro na URL
 
