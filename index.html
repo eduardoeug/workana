@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Carlos Eduardo — Desenvolvedor Web & Mobile</title>
+<meta name="description" content="Portfólio de Carlos Eduardo — desenvolvedor web e mobile. Sistemas em produção e protótipos: SaaS, e-commerce, apps, plataformas e integrações." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f6f7f9;
+    --ink:#0f172a;
+    --ink-2:#334155;
+    --muted:#64748b;
+    --line:#e6e8ee;
+    --card:#ffffff;
+    --accent:#4f46e5;
+    --accent-2:#0ea5e9;
+    --live:#16a34a;
+    --live-bg:#e9f7ef;
+    --demo:#7c3aed;
+    --demo-bg:#f1ebfe;
+    --shadow:0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.06);
+    --shadow-lg:0 12px 40px rgba(15,23,42,.14);
+    --radius:16px;
+    --max:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+  h1,h2,h3{font-family:'Sora','Inter',sans-serif;line-height:1.15;margin:0}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;overflow:hidden;color:#eef2ff;
+    background:
+      radial-gradient(1100px 600px at 15% -10%, rgba(79,70,229,.55), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(14,165,233,.40), transparent 55%),
+      linear-gradient(180deg,#0b1020 0%,#0d1226 100%);
+  }
+  .hero-grid{position:absolute;inset:0;opacity:.35;
+    background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:44px 44px;mask-image:linear-gradient(180deg,#000,transparent 80%)}
+  .topbar{position:relative;display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 4px rgba(79,70,229,.18)}
+  .lang{display:flex;gap:4px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:4px;border-radius:999px}
+  .lang button{
+    border:0;background:transparent;color:#c7d2fe;font:inherit;font-weight:600;font-size:13px;
+    padding:5px 12px;border-radius:999px;cursor:pointer;transition:.18s
+  }
+  .lang button.on{background:#fff;color:#0b1020}
+  .hero-inner{position:relative;padding:48px 0 92px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#a5b4fc;
+    background:rgba(99,102,241,.14);border:1px solid rgba(129,140,248,.3);padding:6px 13px;border-radius:999px}
+  .eyebrow .pulse{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.7);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.6)}70%{box-shadow:0 0 0 9px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+  .hero h1{font-size:clamp(34px,6vw,60px);font-weight:800;margin:20px 0 0;letter-spacing:-.02em;color:#fff}
+  .hero h1 .grad{background:linear-gradient(120deg,#a5b4fc,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{max-width:640px;margin:18px 0 0;font-size:clamp(16px,2.1vw,19px);color:#c7d2e5}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;padding:12px 20px;border-radius:12px;cursor:pointer;transition:.18s;border:1px solid transparent}
+  .btn-primary{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;box-shadow:0 8px 24px rgba(79,70,229,.4)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(79,70,229,.5)}
+  .btn-ghost{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2);color:#e5e7eb}
+  .btn-ghost:hover{background:rgba(255,255,255,.12)}
+  .stats{display:flex;flex-wrap:wrap;gap:26px;margin-top:40px}
+  .stat b{font-family:'Sora';font-size:26px;font-weight:700;color:#fff;display:block;line-height:1}
+  .stat span{font-size:13px;color:#94a3b8}
+
+  .stack{position:relative;border-top:1px solid rgba(255,255,255,.08);background:rgba(6,10,24,.4)}
+  .stack .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:16px 22px}
+  .stack .lbl{font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin-right:6px}
+  .chip{font-size:13px;font-weight:600;color:#cbd5e1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:5px 11px;border-radius:8px}
+
+  /* ---------- SECTIONS ---------- */
+  section.block{padding:66px 0}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:30px;flex-wrap:wrap}
+  .sec-head h2{font-size:clamp(24px,3.4vw,32px);font-weight:800;letter-spacing:-.02em}
+  .sec-head p{margin:8px 0 0;color:var(--muted);max-width:560px}
+  .sec-kicker{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+  .card{
+    position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);transition:.2s;overflow:hidden
+  }
+  .card::before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));opacity:0;transition:.2s}
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:#d7dbe6}
+  .card:hover::before{opacity:1}
+  .card-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .card h3{font-size:19px;font-weight:700}
+  .badge{font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:999px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+  .badge.live{color:var(--live);background:var(--live-bg)}
+  .badge.live .d{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 0 0 rgba(22,163,74,.6);animation:pulse2 2s infinite}
+  @keyframes pulse2{0%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}70%{box-shadow:0 0 0 7px rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}
+  .badge.demo{color:var(--demo);background:var(--demo-bg)}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .badge.app{color:#fff;background:#0f172a}
+  .card p.desc{margin:0;color:var(--ink-2);font-size:14.5px;flex:1}
+  .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+  .tag{font-size:12px;font-weight:600;color:var(--muted);background:var(--bg-soft);border:1px solid var(--line);padding:4px 9px;border-radius:7px}
+  .card-link{margin-top:16px;display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px;color:var(--accent)}
+  .card-link .arw{transition:.18s}
+  .card:hover .card-link .arw{transform:translateX(4px)}
+  .card.big{grid-column:span 2}
+  @media(max-width:720px){.card.big{grid-column:span 1}}
+
+  .prototypes{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+  /* ---------- FOOTER / CTA ---------- */
+  .cta{padding:76px 0;text-align:center;
+    background:radial-gradient(700px 340px at 50% 0%,rgba(79,70,229,.10),transparent 70%)}
+  .cta h2{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.02em}
+  .cta p{color:var(--muted);max-width:520px;margin:14px auto 0;font-size:17px}
+  .cta .cta-row{justify-content:center}
+  .btn-dark{background:var(--ink);color:#fff}
+  .btn-dark:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+  .btn-outline{background:#fff;border-color:var(--line);color:var(--ink)}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+  footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:13.5px}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="wrap">
+    <nav class="topbar">
+      <div class="brand"><span class="dot"></span> Carlos&nbsp;Eduardo</div>
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="pt" class="on">PT</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </nav>
+
+    <div class="hero-inner">
+      <span class="eyebrow"><span class="pulse"></span><span data-pt="Disponível para novos projetos" data-en="Available for new projects">Disponível para novos projetos</span></span>
+      <h1 data-pt="Desenvolvedor web &amp; mobile — do protótipo ao sistema no ar." data-en="Web &amp; mobile developer — from prototype to production.">Desenvolvedor web &amp; mobile — <span class="grad">do protótipo ao sistema no ar.</span></h1>
+      <p class="lead" data-pt="Construo apps, e-commerces, plataformas SaaS e integrações sob medida. Abaixo estão sistemas reais rodando em produção e protótipos navegáveis." data-en="I build apps, e-commerce, SaaS platforms and custom integrations. Below are real systems running in production and clickable prototypes.">Construo apps, e-commerces, plataformas SaaS e integrações sob medida. Abaixo estão sistemas reais rodando em produção e protótipos navegáveis.</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#producao"><span data-pt="Ver sistemas no ar" data-en="See live systems">Ver sistemas no ar</span> →</a>
+        <a class="btn btn-ghost" href="#prototipos" data-pt="Explorar protótipos" data-en="Explore prototypes">Explorar protótipos</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>6</b><span data-pt="sistemas em produção" data-en="systems in production">sistemas em produção</span></div>
+        <div class="stat"><b>3</b><span data-pt="apps na App Store &amp; Play" data-en="apps on App Store &amp; Play">apps na App Store &amp; Play</span></div>
+        <div class="stat"><b>11</b><span data-pt="protótipos navegáveis" data-en="clickable prototypes">protótipos navegáveis</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stack">
+    <div class="wrap">
+      <span class="lbl" data-pt="Stack" data-en="Stack">Stack</span>
+      <span class="chip">JavaScript</span><span class="chip">React</span><span class="chip">Node.js</span>
+      <span class="chip">PHP · Laravel</span><span class="chip">Python</span><span class="chip">WordPress</span>
+      <span class="chip">Flutter · Capacitor</span><span class="chip">MySQL · Postgres</span><span class="chip">API · Webhooks</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ PRODUÇÃO ============ -->
+<section class="block" id="producao">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-kicker" data-pt="No ar" data-en="Live">No ar</span>
+        <h2 data-pt="Sistemas em produção" data-en="Systems in production">Sistemas em produção</h2>
+        <p data-pt="Projetos reais publicados, com domínio próprio e usuários de verdade." data-en="Real, published projects with their own domains and real users.">Projetos reais publicados, com domínio próprio e usuários de verdade.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- P3Remote -->
+      <article class="card big">
+        <div class="card-top">
+          <h3>P3Remote</h3>
+          <span class="badge live"><span class="d"></span><span data-pt="No ar" data-en="Live">No ar</span></span>
+        </div>
+        <p class="desc" data-pt="Software de acesso remoto: conexão por ID, transferência de arquivos, multi-monitor e criptografia TLS 1.3. Uma alternativa a AnyDesk/TeamViewer, com planos gratuito, profissional e empresarial." data-en="Remote-access software: connect by ID, file transfer, multi-monitor and TLS 1.3 encryption. An alternative to AnyDesk/TeamViewer, with free, pro and business plans.">Software de acesso remoto: conexão por ID, transferência de arquivos, multi-monitor e criptografia TLS 1.3. Uma alternativa a AnyDesk/TeamViewer, com planos gratuito, profissional e empresarial.</p>
+        <div class="tags"><span class="tag">Web app</span><span class="tag">Tempo real</span><span class="tag" data-pt="Segurança" data-en="Security">Segurança</span></div>
+        <a class="card-link" href="https://remote.p3sistemas.com" target="_blank" rel="noopener"><span data-pt="Acessar site" data-en="Visit site">Acessar site</span> <span class="arw">→</span></a>
+      </article>
+
+      <!-- P3Agro -->
+      <article class="card">
+        <div class="card-top">
+          <h3>P3Agro</h3>
+          <span class="badges">
+            <span class="badge live"><span class="d"></span><span data-pt="No ar" data-en="Live">No ar</span></span>
+            <span class="badge app">📱 iOS · Android</span>
+          </span>
+        </div>
+        <p class="desc" data-pt="Sistema de gestão pecuária: controle de rebanho, atividades e monitoramento da propriedade rural em um painel único." data-en="Livestock management system: herd control, activities and farm monitoring in a single dashboard.">Sistema de gestão pecuária: controle de rebanho, atividades e monitoramento da propriedade rural em um painel único.</p>
+        <div class="tags"><span class="tag">SaaS</span><span class="tag">Agtech</span><span class="tag">Dashboard</span></div>
+        <a class="card-link" href="https://agro.p3sistemas.com" target="_blank" rel="noopener"><span data-pt="Acessar site" data-en="Visit site">Acessar site</span> <span class="arw">→</span></a>
+      </article>
+
+      <!-- Bellatorri -->
+      <article class="card">
+        <div class="card-top">
+          <h3>Bellatorri</h3>
+          <span class="badge live"><span class="d"></span><span data-pt="No ar" data-en="Live">No ar</span></span>
+        </div>
+        <p class="desc" data-pt="Catálogo interativo de bancadas modulares: configurador de medidas, cores e acessórios com desenho que muda a cada escolha e pedido direto." data-en="Interactive catalog of modular workbenches: a configurator for sizes, colors and add-ons with a live drawing and direct ordering.">Catálogo interativo de bancadas modulares: configurador de medidas, cores e acessórios com desenho que muda a cada escolha e pedido direto.</p>
+        <div class="tags"><span class="tag">E-commerce</span><span class="tag" data-pt="Configurador" data-en="Configurator">Configurador</span><span class="tag">SVG</span></div>
+        <a class="card-link" href="https://bellatorri.p3sistemas.com" target="_blank" rel="noopener"><span data-pt="Acessar site" data-en="Visit site">Acessar site</span> <span class="arw">→</span></a>
+      </article>
+
+      <!-- Tickets Prime -->
+      <article class="card">
+        <div class="card-top">
+          <h3>Tickets Prime</h3>
+          <span class="badges">
+            <span class="badge live"><span class="d"></span><span data-pt="No ar" data-en="Live">No ar</span></span>
+            <span class="badge app">📱 iOS · Android</span>
+          </span>
+        </div>
+        <p class="desc" data-pt="Plataforma de venda de ingressos para eventos: vitrine de eventos e compra de entradas online." data-en="Event ticketing platform: event showcase and online ticket purchasing.">Plataforma de venda de ingressos para eventos: vitrine de eventos e compra de entradas online.</p>
+        <div class="tags"><span class="tag">Web</span><span class="tag" data-pt="Pagamentos" data-en="Payments">Pagamentos</span><span class="tag" data-pt="Eventos" data-en="Events">Eventos</span></div>
+        <a class="card-link" href="https://ticketsprime.com.br" target="_blank" rel="noopener"><span data-pt="Acessar site" data-en="Visit site">Acessar site</span> <span class="arw">→</span></a>
+      </article>
+
+      <!-- Apoiou -->
+      <article class="card">
+        <div class="card-top">
+          <h3>Apoiou</h3>
+          <span class="badge live"><span class="d"></span><span data-pt="No ar" data-en="Live">No ar</span></span>
+        </div>
+        <p class="desc" data-pt="Marketplace de serviços: conecta quem contrata a quem executa, com praticidade na contratação e segurança para o profissional." data-en="Services marketplace: connects clients with providers — simple to hire, safe for professionals.">Marketplace de serviços: conecta quem contrata a quem executa, com praticidade na contratação e segurança para o profissional.</p>
+        <div class="tags"><span class="tag">Marketplace</span><span class="tag">Web</span><span class="tag" data-pt="Pagamentos" data-en="Payments">Pagamentos</span></div>
+        <a class="card-link" href="https://apoiou.com.br" target="_blank" rel="noopener"><span data-pt="Acessar site" data-en="Visit site">Acessar site</span> <span class="arw">→</span></a>
+      </article>
+
+      <!-- EcoClean4Me -->
+      <article class="card">
+        <div class="card-top">
+          <h3>EcoClean4Me</h3>
+          <span class="badges">
+            <span class="badge live"><span class="d"></span><span data-pt="No ar" data-en="Live">No ar</span></span>
+            <span class="badge app">📱 iOS · Android</span>
+          </span>
+        </div>
+        <p class="desc" data-pt="Plataforma de serviços de limpeza ecológica: contratação e agendamento de limpeza sustentável, com app mobile publicado nas lojas." data-en="Eco-friendly cleaning services platform: booking and hiring sustainable cleaning, with a mobile app published on the stores.">Plataforma de serviços de limpeza ecológica: contratação e agendamento de limpeza sustentável, com app mobile publicado nas lojas.</p>
+        <div class="tags"><span class="tag" data-pt="Serviços" data-en="Services">Serviços</span><span class="tag">Mobile</span><span class="tag" data-pt="Agendamento" data-en="Booking">Agendamento</span></div>
+        <a class="card-link" href="https://ecoclean4me.com" target="_blank" rel="noopener"><span data-pt="Acessar site" data-en="Visit site">Acessar site</span> <span class="arw">→</span></a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROTÓTIPOS ============ -->
+<section class="block prototypes" id="prototipos">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-kicker" data-pt="Demos navegáveis" data-en="Clickable demos">Demos navegáveis</span>
+        <h2 data-pt="Protótipos &amp; provas de conceito" data-en="Prototypes &amp; proofs of concept">Protótipos &amp; provas de conceito</h2>
+        <p data-pt="Interfaces funcionais que construí para demonstrar ideias — todas abrem e funcionam no navegador." data-en="Working interfaces I built to demonstrate ideas — all open and run in the browser.">Interfaces funcionais que construí para demonstrar ideias — todas abrem e funcionam no navegador.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <article class="card">
+        <div class="card-top"><h3>Régua</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Cobrança de inadimplência no automático: régua configurável, disparo por WhatsApp/e-mail/SMS na hora certa e recuperação em tempo real, multi-cliente." data-en="Automated debt collection: configurable dunning cadence, WhatsApp/email/SMS at the right time and real-time recovery, multi-tenant.">Cobrança de inadimplência no automático: régua configurável, disparo por WhatsApp/e-mail/SMS na hora certa e recuperação em tempo real, multi-cliente.</p>
+        <div class="tags"><span class="tag">SaaS</span><span class="tag" data-pt="Automação" data-en="Automation">Automação</span></div>
+        <a class="card-link" href="regua/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Marca</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Agendamento online em React: fluxo do cliente (serviço → profissional → data → horário) e painel do profissional com agenda, ocupação e faturamento." data-en="Online booking in React: client flow (service → professional → date → time) and provider dashboard with calendar, occupancy and revenue.">Agendamento online em React: fluxo do cliente (serviço → profissional → data → horário) e painel do profissional com agenda, ocupação e faturamento.</p>
+        <div class="tags"><span class="tag">SaaS</span><span class="tag">React</span></div>
+        <a class="card-link" href="agenda/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Lumo</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Loja virtual em React: vitrine responsiva, filtro por categoria e carrinho funcional — alternativa de site próprio ao Wix." data-en="React online store: responsive storefront, category filter and a working cart — an owned-site alternative to Wix.">Loja virtual em React: vitrine responsiva, filtro por categoria e carrinho funcional — alternativa de site próprio ao Wix.</p>
+        <div class="tags"><span class="tag">E-commerce</span><span class="tag">React</span></div>
+        <a class="card-link" href="loja/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Bolso</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="App mobile de finanças pessoais: saldo, gastos por categoria, drill-in nas transações e metas com alerta." data-en="Personal finance mobile app: balance, spend by category, transaction drill-in and goals with alerts.">App mobile de finanças pessoais: saldo, gastos por categoria, drill-in nas transações e metas com alerta.</p>
+        <div class="tags"><span class="tag">Mobile</span><span class="tag">UI</span></div>
+        <a class="card-link" href="financas/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Casamento</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Plataforma multi-casamento: cada casal com seu site (programação, RSVP, transfer), painel com confirmações em tempo real e o mesmo código virando app mobile via Capacitor." data-en="Multi-wedding platform: a site per couple (schedule, RSVP, transfer), a dashboard with real-time confirmations, and the same codebase shipped as a mobile app via Capacitor.">Plataforma multi-casamento: cada casal com seu site (programação, RSVP, transfer), painel com confirmações em tempo real e o mesmo código virando app mobile via Capacitor.</p>
+        <div class="tags"><span class="tag">Multi-tenant</span><span class="tag">Capacitor</span></div>
+        <a class="card-link" href="casamento/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Bibllo</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Blog corporativo + portal administrativo: destaques, busca e paginação, mais publicação pela própria equipe com prévia de SEO e newsletter." data-en="Corporate blog + admin portal: highlights, search and pagination, plus self-service publishing with SEO preview and newsletter.">Blog corporativo + portal administrativo: destaques, busca e paginação, mais publicação pela própria equipe com prévia de SEO e newsletter.</p>
+        <div class="tags"><span class="tag">CMS</span><span class="tag">Web</span></div>
+        <a class="card-link" href="bibllo/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>BuJo</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="App de rotina no método Bullet Journal: registro rápido com os significantes reais, migração de tarefas, logs diário/mensal/futuro, coleções e habit tracker." data-en="Bullet-Journal routine app: rapid logging with real signifiers, task migration, daily/monthly/future logs, collections and habit tracker.">App de rotina no método Bullet Journal: registro rápido com os significantes reais, migração de tarefas, logs diário/mensal/futuro, coleções e habit tracker.</p>
+        <div class="tags"><span class="tag">Mobile</span><span class="tag">Web app</span></div>
+        <a class="card-link" href="bujo/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Norte</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Organização de estudos e tarefas: prioridades, prazos, progresso do dia e por matéria." data-en="Study &amp; task organizer: priorities, deadlines, daily and per-subject progress.">Organização de estudos e tarefas: prioridades, prazos, progresso do dia e por matéria.</p>
+        <div class="tags"><span class="tag">Web app</span><span class="tag">UI</span></div>
+        <a class="card-link" href="norte/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Conecta</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Landing + site institucional de um app de intermediação de freelancers/entregadores: seletor Profissional/Empresa, mockup do app e painel para empresas." data-en="Landing + corporate site for a gig-work intermediation app: Professional/Company selector, app mockup and a company portal.">Landing + site institucional de um app de intermediação de freelancers/entregadores: seletor Profissional/Empresa, mockup do app e painel para empresas.</p>
+        <div class="tags"><span class="tag">Landing</span><span class="tag" data-pt="Institucional" data-en="Corporate">Institucional</span></div>
+        <a class="card-link" href="conecta/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Dimensão FM</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Site da rádio Dimensão FM 104.5: presença online da emissora com a identidade da estação." data-en="Website for Dimensão FM 104.5: the station's online presence with its brand identity.">Site da rádio Dimensão FM 104.5: presença online da emissora com a identidade da estação.</p>
+        <div class="tags"><span class="tag">Site</span><span class="tag" data-pt="Mídia" data-en="Media">Mídia</span></div>
+        <a class="card-link" href="dimensao/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><h3>Luxo On</h3><span class="badge demo">Demo</span></div>
+        <p class="desc" data-pt="Blueprint de plataforma concierge de beleza: parâmetros configuráveis, match de profissionais e split de pagamento (Softr/Airtable/Make/Stripe)." data-en="Beauty-concierge platform blueprint: configurable rules, provider matching and payment split (Softr/Airtable/Make/Stripe).">Blueprint de plataforma concierge de beleza: parâmetros configuráveis, match de profissionais e split de pagamento (Softr/Airtable/Make/Stripe).</p>
+        <div class="tags"><span class="tag">Blueprint</span><span class="tag">No-code</span></div>
+        <a class="card-link" href="luxo-on/" target="_blank" rel="noopener"><span data-pt="Abrir demo" data-en="Open demo">Abrir demo</span> <span class="arw">→</span></a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="contato">
+  <div class="wrap">
+    <h2 data-pt="Vamos tirar sua ideia do papel?" data-en="Let's build your idea?">Vamos tirar sua ideia do papel?</h2>
+    <p data-pt="App, site, e-commerce, sistema web ou integração — do protótipo à publicação, sem pagamento adiantado." data-en="App, website, e-commerce, web system or integration — from prototype to launch, with no upfront payment.">App, site, e-commerce, sistema web ou integração — do protótipo à publicação, sem pagamento adiantado.</p>
+    <div class="cta-row">
+      <a class="btn btn-dark" href="https://github.com/eduardoeug" target="_blank" rel="noopener"><span data-pt="Ver no GitHub" data-en="View GitHub">Ver no GitHub</span> →</a>
+      <a class="btn btn-outline" href="#producao" data-pt="Rever os projetos" data-en="Back to projects">Rever os projetos</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Carlos Eduardo</span>
+    <span data-pt="Desenvolvido com HTML, CSS e JavaScript · publicado no GitHub Pages" data-en="Built with HTML, CSS &amp; JavaScript · hosted on GitHub Pages">Desenvolvido com HTML, CSS e JavaScript · publicado no GitHub Pages</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var STORE='ce_lang';
+    var buttons=document.querySelectorAll('.lang button');
+    function apply(lang){
+      document.documentElement.lang = (lang==='en'?'en':'pt-BR');
+      document.querySelectorAll('[data-pt]').forEach(function(el){
+        var v = el.getAttribute('data-'+lang);
+        if(v!=null) el.innerHTML = v;
+      });
+      buttons.forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-lang')===lang); });
+      try{ localStorage.setItem(STORE, lang); }catch(e){}
+    }
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){ apply(b.getAttribute('data-lang')); });
+    });
+    var saved; try{ saved=localStorage.getItem(STORE); }catch(e){}
+    var initial = saved || ((navigator.language||'').toLowerCase().indexOf('en')===0 ? 'en' : 'pt');
+    apply(initial);
+    var yr=document.getElementById('yr'); if(yr) yr.textContent=new Date().getFullYear();
+  })();
+</script>
+</body>
+</html>
